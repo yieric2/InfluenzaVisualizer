@@ -28,7 +28,7 @@ The Google Maps API is utilized to power the mapping features of this applicatio
 - **Markers and Info Windows**: Place markers on the map for each provider location, with info windows providing details about each provider.
 
 ### Data Source
-Influenza Visualizer CDC
+Influenza Visualizer CDC & Google Map API
 
 ## User Guide
 
