@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<canvas id="lineChart" width="800" height="400"></canvas>
+
+<script>
+    fetch('/Projects/backend/api/hospitalizations.cfm')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Data received:', data); // Log data to console
+        
+        // Assuming 'data' has properties 'COLUMNS' and 'DATA'
+        const columns = data.COLUMNS;
+        const rowData = data.DATA;
+
+        // Extracting the data needed for the chart
+        const labels = rowData.map(row => row[0]); // Assuming the first column contains the labels (x-axis)
+        const weeklyRates = rowData.map(row => row[1]); // Assuming the second column contains the weekly rates (y-axis)
+
+        // Creating the line chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Weekly Rate',
+                    data: weeklyRates,
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'week'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Week'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Weekly Rate'
+                        }
+                    }]
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+</script>
+
+</body>
+</html>
