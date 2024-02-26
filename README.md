@@ -21,7 +21,8 @@ Setting up the ColdFusion environment is fairly straight forward:
 - Create an App Token
 - Connect Using:  
 
-``` <cfhttp method = "GET" url = "#apiEndPoint#?" result = "httpResponse">
+```
+<cfhttp method = "GET" url = "#apiEndPoint#?" result = "httpResponse">
     <cfhttpparam type = "header" name = "X-App-Token" value = "MYKEY">
 </cfhttp>
  ```
