@@ -1,0 +1,11 @@
+CREATE TABLE ProviderLocations (
+    provider_location_guid INT AUTO_INCREMENT PRIMARY KEY,
+    loc_phone VARCHAR(50),
+    loc_name VARCHAR(255),
+    loc_admin_address VARCHAR(255),
+    Open_hours VARCHAR(255),
+    insurance_accepted BOOLEAN,
+    walkins_accepted BOOLEAN,
+    provider_notes TEXT,
+    geopoint POINT
+);
