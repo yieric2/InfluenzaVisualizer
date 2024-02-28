@@ -104,7 +104,7 @@
             myData.append("(" & values & ")");
 
     }
-        writeOutput(myData[3])
+        writeOutput(myData[1]) //Some Arbitrary Display Of Data Format
         </cfscript>
         <cfquery name="insertData" datasource="#db_name#">
             INSERT INTO #db_table# (loc_name, loc_phone, loc_admin_address, Open_hours, insurance_accepted, walkins_accepted, provider_notes, geopoint)
