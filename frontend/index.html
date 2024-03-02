@@ -5,73 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-    <div style="width: 80%; margin: auto;">
+    <div class="chart-container">
         <canvas id="lineChart"></canvas>
     </div>
     <script>
-        function fetchWeeklyData() {
-            fetch('/Projects/backend/api/hospitalizations.cfm')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Data received:', data);
+        fetch('/Projects/backend/api/hospitalizations.cfm')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
 
-                    const columns = data.COLUMNS;
-                    const rowData = data.DATA;
+                var columns = data.COLUMNS;
+                var rowData = data.DATA;
 
-                    const labels = rowData.map(row => row[0]);
-                    const weeklyRates = rowData.map(row => row[1]);
+                var labels = rowData.map(row => row[0]);
+                var weeklyRates = rowData.map(row => row[1]);
 
-                    const ctx = document.getElementById('lineChart').getContext('2d');
-                    const lineChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Weekly Rate',
-                                data: weeklyRates,
-                                borderColor: 'blue',
-                                fill: false
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                xAxes: [{
-                                    type: 'time',
-                                    time: {
-                                        unit: 'week'
-                                    },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Week'
-                                    }
-                                }],
-                                yAxes: [{
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Weekly Rate'
-                                    }
-                                }]
+                var ctx = document.getElementById('lineChart').getContext('2d');
+                var lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Weekly Rate',
+                            data: weeklyRates,
+                            borderColor: 'blue',
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Weeks'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Rates'
+                                }
                             }
                         }
-                    });
-                })
-        }
-        window.onload = function () {
-
-            fetch('/Projects/backend/index.cfm').then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch index.cfm');
-                }
-                return fetchWeeklyData();
+                    }
+                });
             })
-
-        };
     </script>
 </body>
 
