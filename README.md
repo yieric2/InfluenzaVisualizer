@@ -9,8 +9,8 @@ There will be filters for the following options:
 
 Requirements to utilize code
 * Setup cold fusion server
-* Setup cdc application key and set it to an environmental variable called "API_KEY"
 * Setup mysql server with the following table - hospitalization_info with columns found in er diagram
+* Place CSV into folder and run script to populate the database
 
 ER DIAGRAM:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/cde8ef68-2500-49f5-ad7c-c7629e37ea91)
 
