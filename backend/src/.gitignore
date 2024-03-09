@@ -1,0 +1,7 @@
+.env
+.project
+settings.xml
+.*csv
+Vaccines.gov__Flu_vaccinating_provider_locations.csv
+src.code-workspace.json
+.vscode

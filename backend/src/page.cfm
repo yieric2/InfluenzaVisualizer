@@ -10,111 +10,90 @@
     </cfoutput>
     <cfoutput>
         <cfset Env =createObject("java","java.lang.System")>
-        <cfset api_key = Env.getProperty("APP_TOKEN")>
-        <cfset api_endpoint = Env.getProperty("API_EP")>
         <cfset db_name="CDC_DataSource">
         <cfset db_user= Env.getProperty("db_user")>
         <cfset db_table = Env.getProperty("table_name")>
         <cfset db_password = Env.getProperty("db_pass")>
         <cftry>
-            <cfhttp url="#api_endpoint#" method="GET" result="httpResponse">
-                <cfhttpparam type="header" name="X-App-Token" value=#api_key#>
-            </cfhttp>
-            <cfif httpResponse.statusCode eq "200 OK">
-                <cfset fluProviderData = deserializeJSON(httpResponse.filecontent)>
-            <cfelse>
-                <p>Error retrieving data. HTTP Status Code: #httpResponse.statusCode#</p>
-            </cfif>
-
-            <cfcatch type="Any">
-                <p>Error: #cfcatch.message#</p>
-            </cfcatch>
-        </cftry>
-        <cftry>
         <cfscript>
+        csvFile = fileRead("C:\Users\AlexP\cfusion\wwwroot\AlexProject\data_set\Original_data.csv"); // might have to hide this data
+        lines =  listToArray(csvFile, chr(10));
         myData = [];
-        for (i = 1; i <= arrayLen(fluProviderData); i++) {
-            currentItem = fluProviderData[i];
-            addressArray = [];
-            openHoursArray = [];
-            insuranceAccept = [];
-            walkinAccept = [];
-            notesArr = [];
-            valuesArray = [];
+        function csv_split(required string line ) {
+            var columns = [];
+            var currentColumn = "";
+            var inQuote = false;
+            var i = 1;
+            for (i = 1; i <= len(line); i++) {
+                var char = mid(line, i, 1);
+                if (char == ",") {
+                    if (inQuote) {
+                        currentColumn &= char;
+                    } else {
+                        arrayAppend(columns, currentColumn);
+                        currentColumn = "";
+                    }
+                } else if (char == '"') {
+                    inQuote = !inQuote;
+                } else {
+                    currentColumn &= char;
+                }
+            }
+            arrayAppend(columns, currentColumn);
+            return columns;
+        }
+        function create_point(required float lat, required float log) {
+            point = "POINT(" & lat & ' ' & log & ")";
+            return 'ST_PointFromText("' & point & '")';
+            }
+        for(i = 2; i <= arrayLen(lines); i++) {
+            row = csv_split(lines[i]);
+            bool_indices = [19, 20, 23];
 
-
-    
-            addressArray.append(currentItem.loc_admin_street1);
-            addressArray.append(currentItem.loc_admin_city);
-            addressArray.append(currentItem.loc_admin_state);
-            addressArray.append(currentItem.loc_admin_zip);
-            address = arrayToList(addressArray, " ");
-
-    
-            if (structKeyExists(currentItem, "monday_hours")) {
-                openHoursArray.append("M: #currentItem.monday_hours#, ");
+            for(index in bool_indices) {
+                row[index] = (row[index] eq 'true') ? 'TRUE' : 'FALSE';
             }
-            if (structKeyExists(currentItem, "tuesday_hours")) {
-                openHoursArray.append("T: #currentItem.tuesday_hours#, ");
+            
+            if(len(row[26]) eq 0){
+                row[26] = 0;
+                row[27] = 0;
             }
-            if (structKeyExists(currentItem, "wednesday_hours")) {
-                openHoursArray.append("W: #currentItem.wednesday_hours#, ");
-            }
-            if (structKeyExists(currentItem, "thursday_hours")) {
-                openHoursArray.append("Th: #currentItem.thursday_hours#, ");
-            }
-            if (structKeyExists(currentItem, "friday_hours")) {
-                openHoursArray.append("F: #currentItem.friday_hours#, ");
-            }
-            if (structKeyExists(currentItem, "saturday_hours")) {
-                openHoursArray.append("S: #currentItem.saturday_hours#");
-            }    
-            open_hours = Len(arrayToList(openHoursArray, " ")) ? arrayToList(openHoursArray, " ") : "NULL";
-
-            if(structKeyExists(currentItem, "insurance_accepted")) {
-                insuranceAcceptance = Len(Trim(currentItem.insurance_accepted)) ? "TRUE" : "FALSE"
-                insuranceAccept.append(insuranceAcceptance);
-            }
-            else {
-                insuranceAccept.append("NULL");
-            }
-            if(structKeyExists(currentItem, "walkins_accepted")) {
-                walkinAcceptance = Len(Trim(currentItem.walkins_accepted)) ? "TRUE" : "FALSE"
-                walkinAccept.append(walkinAcceptance);
-            } else {
-                walkinAccept.append("NULL");
-            }
-            if(structKeyExists(currentItem,"provider_notes")) {
-                notesArr.append(currentItem.provider_notes);
-            } else {
-                notesArr.append("NULL");
-            }
-            POINT = "POINT("&currentItem.latitude & " " & currentItem.longitude&")";
-            valuesArray.append( '"' & currentItem.loc_name & '"');
-            valuesArray.append( '"' & currentItem.loc_phone & '"');
-            valuesArray.append('"' & address & '"');
-            valuesArray.append( '"' & open_hours & '"');
-            valuesArray.append(arrayToList(insuranceAccept, ","));
-            valuesArray.append(arrayToLIst(walkinAccept, ","));
-            if (notesArr.contains("NULL")){
-                valuesArray.append(arrayToList(notesArr, ","));
-            } else {valuesArray.append('"' & arrayToList(notesArr, ",") & '"');}
-            valuesArray.append('ST_PointFromText("' & POINT & '")');
-            values = arrayToList(valuesArray, ",");  
-            myData.append("(" & values & ")");
-
-    }
-        writeOutput(myData[1]) //Some Arbitrary Display Of Data Format
+            
+           arrayAppend(myData, '("' & row[1] & '","' & row[2] & '","' & row[3] & '","' & row[4] & '","' & row[5] & '","' & row[6] & '","' & row[7] & '","' & row[8] & '","' & row[9] & '","' & row[10] & '","' & row[11] & '","' & row[12] & '","' & row[13] & '","' & row[14] & '","' & row[15] & '","' & row[16] & '","' & row[17] & '","' & row[18] & '",' & row[19] & ',' & row[20] & ',"' & row[21] & '","' & row[22] & '",' & row[23] & ',' & row[24] & ',"' & row[25] & '",' & create_point(row[26],row[27]) & ',"' & row[28] & '")');
+        }
+        values = arrayToList(myData, ",")
         </cfscript>
-        <cfquery name="insertData" datasource="#db_name#">
-            INSERT INTO #db_table# (loc_name, loc_phone, loc_admin_address, Open_hours, insurance_accepted, walkins_accepted, provider_notes, geopoint)
-            VALUES #arrayToList(myData,",")#
-            </cfquery>
             <cfcatch type="Any">
                 <p>Error: #cfcatch.message#</p>
             </cfcatch>
         </cftry>
-
+    </cfoutput>
+    <cfoutput >
+    <cftry>
+    <cfquery datasource="#db_name#">
+        truncate table #db_table#
+    </cfquery>
+        <cfloop from="1" to="#arrayLen(myData)#" index="i">
+            <cfquery datasource="#db_name#">
+                INSERT INTO #db_table# (
+                    provider_location_guid, loc_store_no, loc_phone, loc_name, loc_admin_street1, 
+                    loc_admin_street2, loc_admin_city, loc_admin_state, loc_admin_zip, sunday_hours, 
+                    monday_hours, tuesday_hours, wednesday_hours, thursday_hours, friday_hours, 
+                    saturday_hours, web_address, pre_screen, insurance_accepted, walkins_accepted, 
+                    provider_notes, searchable_name, in_stock, supply_level, quantity_last_updated, 
+                    geopoint, category
+                ) VALUES #myData[i]#
+            </cfquery>
+        </cfloop>
+    <cfcatch type="Any">
+        <cfoutput>
+            Error: #cfcatch.message#<br>
+            Detail: #cfcatch.detail#<br>
+            SQLState: #cfcatch.SqlState#<br>
+            ErrorCode: #cfcatch.ErrorCode#
+        </cfoutput>
+    </cfcatch>
+    </cftry>     
     </cfoutput>
 </body>
 </html>
