@@ -5,8 +5,6 @@
 </head>
 <body>
     <cfoutput>
-        <h1>Welcome to ColdFusion!</h1>
-        <p>Current Server Time: #Now()#</p>
     </cfoutput>
     <cfoutput>
         <cfset Env =createObject("java","java.lang.System")>
@@ -16,9 +14,11 @@
         <cfset db_password = Env.getProperty("db_pass")>
         <cftry>
         <cfscript>
-        csvFile = fileRead("C:\Users\AlexP\cfusion\wwwroot\AlexProject\data_set\Original_data.csv"); // might have to hide this data
+        csvFile = fileRead("C:\Users\AlexP\cfusion\wwwroot\App\CSVFile\Original_data.csv"); // might have to hide this data
         lines =  listToArray(csvFile, chr(10));
         myData = [];
+        batchSize = 1200;
+        currentBatch = []; 
         function csv_split(required string line ) {
             var columns = [];
             var currentColumn = "";
@@ -60,8 +60,18 @@
             }
             
            arrayAppend(myData, '("' & row[1] & '","' & row[2] & '","' & row[3] & '","' & row[4] & '","' & row[5] & '","' & row[6] & '","' & row[7] & '","' & row[8] & '","' & row[9] & '","' & row[10] & '","' & row[11] & '","' & row[12] & '","' & row[13] & '","' & row[14] & '","' & row[15] & '","' & row[16] & '","' & row[17] & '","' & row[18] & '",' & row[19] & ',' & row[20] & ',"' & row[21] & '","' & row[22] & '",' & row[23] & ',' & row[24] & ',"' & row[25] & '",' & create_point(row[26],row[27]) & ',"' & row[28] & '")');
+
         }
-        values = arrayToList(myData, ",")
+
+        values = [];
+        for(i = 1; i <= arrayLen(myData); i++){
+                arrayAppend(currentBatch, myData[i]);
+                if(arrayLen(currentBatch) eq batchSize){
+                    arrayAppend(values,arrayToList(currentBatch, ","));
+                    currentBatch = [];
+                }
+            }
+
         </cfscript>
             <cfcatch type="Any">
                 <p>Error: #cfcatch.message#</p>
@@ -71,9 +81,9 @@
     <cfoutput >
     <cftry>
     <cfquery datasource="#db_name#">
-        truncate table #db_table#
+        TRUNCATE TABLE #db_table#
     </cfquery>
-        <cfloop from="1" to="#arrayLen(myData)#" index="i">
+        <cfloop from="1" to="#arrayLen(values)#" index="i">
             <cfquery datasource="#db_name#">
                 INSERT INTO #db_table# (
                     provider_location_guid, loc_store_no, loc_phone, loc_name, loc_admin_street1, 
@@ -82,7 +92,7 @@
                     saturday_hours, web_address, pre_screen, insurance_accepted, walkins_accepted, 
                     provider_notes, searchable_name, in_stock, supply_level, quantity_last_updated, 
                     geopoint, category
-                ) VALUES #myData[i]#
+                ) VALUES #values[i]#
             </cfquery>
         </cfloop>
     <cfcatch type="Any">
