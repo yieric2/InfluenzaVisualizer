@@ -3,5 +3,4 @@
 settings.xml
 *.cfproject
 .vscode
-
-```
+backend/src/node_modules
