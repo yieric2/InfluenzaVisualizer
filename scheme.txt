@@ -21,7 +21,7 @@ CREATE TABLE provider_locations (
     loc_admin_state varchar(2),
     loc_admin_zip varchar(10),
     insurance_accepted bool,
-    in_stock bool,
+    in_stock bool, 
     walkins_accepted bool,
     provider_notes text,
     supply_level int,
