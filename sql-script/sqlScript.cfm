@@ -27,7 +27,7 @@ Cumulative doses lines[8]
 
 
     <cfset weekStartDate = dateFormat(parseDateTime(row[2], "MM/dd/yyyy"), "yyyy-MM-dd")>
-    <cfset weekEndDate = dateFormat(parseDateTime(row[2], "MM/dd/yyyy"), "yyyy-MM-dd")>
+    <cfset weekEndDate = dateFormat(parseDateTime(row[3], "MM/dd/yyyy"), "yyyy-MM-dd")>
 
 
 
