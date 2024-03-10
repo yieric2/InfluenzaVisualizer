@@ -21,3 +21,20 @@
     margin-top: 12px;
     padding: 248px;
 }
+
+.graph-bottom {
+    text-align: center;
+    font-size: 26px;
+    display: flex;
+
+}
+
+.graph-stats {
+    margin-left: 144px;
+    margin-right: 144px;
+    padding: 12px;
+}
+
+.graph-description {
+    margin-right: 144px;
+}
