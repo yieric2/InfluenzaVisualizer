@@ -1,0 +1,23 @@
+.navbar {
+    color: red;
+    text-align: center;
+    text-justify: center;
+    border-bottom: solid;
+    border-color: black;
+    border-width: 1px;
+
+    padding: 24px;
+}
+
+
+.graph-title {
+    text-align: center;
+}
+
+.graph {
+    border: solid;
+    text-align: center;
+    margin: 24px;
+    margin-top: 12px;
+    padding: 248px;
+}
