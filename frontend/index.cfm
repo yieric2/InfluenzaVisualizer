@@ -12,7 +12,7 @@
     <div id="map"></div>
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <script src="./map/map.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={YOU_GOOGLE_MA}&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={YOUR_GOOGLE_MAP_API_KEY}&callback=initMap"></script>
 </body>
 </html>
 ```
