@@ -2,13 +2,13 @@ Step 1:
 Execute the db_creation script, a copy as a txt file is also available in case that fails.
 
 Step 2: 
-Download csv files in the root folder (wwwroot). 
+Download csv files and move them to the csv folder in wwwroot. 
 
 Step 3: 
 Modify CSV file in the script if necessary. (the file path)
 
 Step 4: 
-Execute the sqlScript.vfm (that is hosting it on the server and accessing the webpage once).
+Execute the sqlScript.cfm (that is hosting it on the server and accessing the webpage once).
 
 
 
