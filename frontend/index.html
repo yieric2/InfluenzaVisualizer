@@ -1,65 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>HomePage</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-    <div class="chart-container">
-        <canvas id="lineChart"></canvas>
-    </div>
+    <header id="navbar">
+        <!-- Navigation bar will be loaded here -->
+    </header>
+
     <script>
-        fetch('/Projects/backend/api/hospitalizations.cfm')
-            .then(response => response.json())
+        // Load navigation bar
+        fetch('navbar.html')
+            .then(response => response.text())
             .then(data => {
-                console.log('Data received:', data);
-
-                var columns = data.COLUMNS;
-                var rowData = data.DATA;
-
-                var labels = rowData.map(row => row[0]);
-                var weeklyRates = rowData.map(row => row[1]);
-
-                var ctx = document.getElementById('lineChart').getContext('2d');
-                var lineChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Weekly Rate',
-                            data: weeklyRates,
-                            borderColor: 'blue',
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Weeks'
-                                }
-                            },
-                            y: {
-                                display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Rates'
-                                }
-                            }
-                        }
-                    }
-                });
+                document.getElementById('navbar').innerHTML = data;
             })
+            .catch(error => {
+                console.error('Error loading navigation bar:', error);
+            });
     </script>
-</body>
 
+    <!-- Your page content goes here -->
+
+</body>
 </html>

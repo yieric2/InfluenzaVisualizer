@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribution</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body>
+    <header id="navbar"></header>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+                const currentPage = window.location.pathname;
+                let activeLink = null;
+                if (currentPage.includes('page1.html')) {
+                    activeLink = document.getElementById('page1-link');
+                } else if (currentPage.includes('page2.html')) {
+                    activeLink = document.getElementById('page2-link');
+                } else if (currentPage.includes('page3.html')) {
+                    activeLink = document.getElementById('page3-link');
+                } else if (currentPage.includes('page4.html')) {
+                    activeLink = document.getElementById('page4-link');
+                }
+
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading navigation bar:', error);
+            });
+    </script>
+
+</body>
+<p>Distribution Page</p>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rates</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header id="navbar"></header>
+    <div class="chart-container">
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+                const currentPage = window.location.pathname;
+                let activeLink = null;
+                if (currentPage.includes('page1.html')) {
+                    activeLink = document.getElementById('page1-link');
+                } else if (currentPage.includes('page2.html')) {
+                    activeLink = document.getElementById('page2-link');
+                } else if (currentPage.includes('page3.html')) {
+                    activeLink = document.getElementById('page3-link');
+                } else if (currentPage.includes('page4.html')) {
+                    activeLink = document.getElementById('page4-link');
+                }
+
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading navigation bar:', error);
+            });
+    </script>
+    <script>
+        fetch('/Projects/backend/api/hospitalizations.cfm')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+
+                var columns = data.COLUMNS;
+                var rowData = data.DATA;
+
+                var labels = rowData.map(row => row[0]);
+                var weeklyRates = rowData.map(row => row[1]);
+
+                var ctx = document.getElementById('lineChart').getContext('2d');
+                var lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Weekly Rate',
+                            data: weeklyRates,
+                            borderColor: 'blue',
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Weeks'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Rates'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+    </script>
+</body>
+
+</html>
