@@ -14,4 +14,5 @@ Requirements to utilize code
 
 ER DIAGRAM:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/cde8ef68-2500-49f5-ad7c-c7629e37ea91)
 
-FIGMA MOCKUP:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/38cc310c-623a-4889-9662-eb22eb9b1d14)
+FIGMA MOCKUP:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/de1b7b11-ff98-482d-8cd6-ee28a1661bc7)
+
