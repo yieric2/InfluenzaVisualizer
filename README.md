@@ -12,7 +12,8 @@ Requirements to utilize code
 * Setup mysql server with the following table - hospitalization_info with columns found in er diagram
 * Place CSV into folder and run script to populate the database
 
-ER DIAGRAM:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/cde8ef68-2500-49f5-ad7c-c7629e37ea91)
+ER DIAGRAM:\
+![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/93801a01-2ca0-4c25-aab9-3062d33effc0)
 
 FIGMA MOCKUP:![image](https://github.com/yieric2/InfluenzaVisualizer/assets/69495267/de1b7b11-ff98-482d-8cd6-ee28a1661bc7)
 
