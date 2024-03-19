@@ -17,8 +17,9 @@
         csvFile = fileRead("C:\Users\AlexP\cfusion\wwwroot\App\CSVFile\Original_data.csv"); // might have to hide this data
         lines =  listToArray(csvFile, chr(10));
         myData = [];
-        batchSize = 1200;
+        batchSize = 1065;
         currentBatch = []; 
+        uniq_id = {};
         function csv_split(required string line ) {
             var columns = [];
             var currentColumn = "";
@@ -46,8 +47,15 @@
             point = "POINT(" & lat & ' ' & log & ")";
             return 'ST_PointFromText("' & point & '")';
             }
+
         for(i = 2; i <= arrayLen(lines); i++) {
             row = csv_split(lines[i]);
+            if( structKeyExists(uniq_id, row[1]) ) {
+                continue;
+            } else {
+                uniq_id[row[1]] = true;
+            }
+
             bool_indices = [19, 20, 23];
 
             for(index in bool_indices) {
@@ -58,7 +66,7 @@
                 row[26] = 0;
                 row[27] = 0;
             }
-            
+
            arrayAppend(myData, '("' & row[1] & '","' & row[2] & '","' & row[3] & '","' & row[4] & '","' & row[5] & '","' & row[6] & '","' & row[7] & '","' & row[8] & '","' & row[9] & '","' & row[10] & '","' & row[11] & '","' & row[12] & '","' & row[13] & '","' & row[14] & '","' & row[15] & '","' & row[16] & '","' & row[17] & '","' & row[18] & '",' & row[19] & ',' & row[20] & ',"' & row[21] & '","' & row[22] & '",' & row[23] & ',' & row[24] & ',"' & row[25] & '",' & create_point(row[26],row[27]) & ',"' & row[28] & '")');
 
         }
