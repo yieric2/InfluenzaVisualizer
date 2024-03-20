@@ -1,4 +1,4 @@
-*.json
+
 .project
 settings.xml
 *.cfproject
