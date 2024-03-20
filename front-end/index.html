@@ -23,7 +23,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <h1 class="graph-title">This is my graph</h1>
+    <h1 class="graph-title">Cumulative Doses in Millions</h1>
 
     <div class="graph">
         <canvas id="myChart" width="400" height="200"></canvas>
@@ -64,7 +64,7 @@
                         const cumulativeDoses = item['CumulativeDoses'.toUpperCase()];
                         doses.push(cumulativeDoses);
                         weekOrder.push(week);
-                        container.appendChild(paragraph);
+                        //  container.appendChild(paragraph);
                     });
                     // Render chart after data is fetched and processed, otherwise would yield issues
                     renderChart();
@@ -83,7 +83,7 @@
                 data: {
                     labels: weekOrder,
                     datasets: [{
-                        label: 'Cumulative Doses',
+                        label: 'Cumulative Doses: 2018-2019 Influenza Season',
                         data: doses,
                         borderColor: 'blue'
                     }]
