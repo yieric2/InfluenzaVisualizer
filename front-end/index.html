@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="doses.css">
+    <title>Influenza's vaccine doses in millions</title>
+</head>
+
+<body>
+    <header id="navbar">
+        <!-- Navigation bar will be loaded here -->
+    </header>
+    <script>
+        // Load navigation bar
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navigation bar:', error);
+            });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <h1 class="graph-title">This is my graph</h1>
+
+    <div class="graph">
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="graph-bottom">
+        <div class="graph-stats">Some stats here and there</div>
+        <div class="graph-description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum.
+        </div>
+    </div>
+    <div id="dataContainer"></div>
+    <script>
+        // JavaScript code to retrieve data from ColdFusion REST API
+        const endpointUrl = "../back-end/api.cfm/doses";
+        let doses = [];
+        let weekOrder = [];
+
+        function fetchData() {
+            fetch(endpointUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Output data to console
+                    data.forEach(item => {
+                        const container = document.getElementById("dataContainer");
+                        const paragraph = document.createElement("p");
+                        paragraph.textContent = `WEEK START DATE: ${item['WeekStartDate'.toUpperCase()]}, WEEK END DATE: ${item['WeekEndDate'.toUpperCase()]}, SEASON: ${item['Season'.toUpperCase()]}, CUMULATIVE DOSES: ${item['CumulativeDoses'.toUpperCase()]}, WEEK SEASON ORDER: ${item['WeekSeasonOrder'.toUpperCase()]}`;
+                        const week = item['WeekSeasonOrder'.toUpperCase()];
+                        const cumulativeDoses = item['CumulativeDoses'.toUpperCase()];
+                        doses.push(cumulativeDoses);
+                        weekOrder.push(week);
+                        container.appendChild(paragraph);
+                    });
+                    // Render chart after data is fetched and processed, otherwise would yield issues
+                    renderChart();
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                });
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('myChart');
+            console.log(doses);
+            console.log(weekOrder);
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: weekOrder,
+                    datasets: [{
+                        label: 'Cumulative Doses',
+                        data: doses,
+                        borderColor: 'blue'
+                    }]
+                }
+            });
+        }
+
+        // Call fetchData function
+        fetchData();
+    </script>
+</body>
+
+</html>

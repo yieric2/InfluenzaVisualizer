@@ -19,13 +19,11 @@ switch (cgi.request_method) {
                 writeOutput(response);
             }
         } else {
-            // Handle other GET requests
-            // Return error or handle accordingly
+            
         }
         break;
     default:
-        // Handle other HTTP methods
-        // Return error or handle accordingly
+       
         break;
 }
 </cfscript>
