@@ -11,6 +11,7 @@
 
 <body>
     <header id="navbar"></header>
+    <p style="font-weight: bold; font-size: 20px; margin-left: 400px; margin-top: 50px;">Weekly Hospitalization Rates: 2022 - 2023</p>
     <div class="chart-container">
         <canvas id="lineChart"></canvas>
     </div>
@@ -49,8 +50,9 @@
                 var columns = data.COLUMNS;
                 var rowData = data.DATA;
 
-                var labels = rowData.map(row => row[0]);
+                var labels = rowData.map(row => row[0].slice(0, 10));
                 var weeklyRates = rowData.map(row => row[1]);
+                console.log(labels)
 
                 var ctx = document.getElementById('lineChart').getContext('2d');
                 var lineChart = new Chart(ctx, {
@@ -58,7 +60,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Weekly Rate',
+                            label: 'Weekly Rate per 100,000',
                             data: weeklyRates,
                             borderColor: 'blue',
                             fill: false

@@ -6,10 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distribution</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <header id="navbar"></header>
+    <p style="font-weight: bold; font-size: 20px; margin-left: 400px; margin-top: 50px;">Cumulative Influenza Vaccination Coverage: 2018 - 2019</p>
+    <div class="chart-container3">
+        <canvas id="myChart"></canvas>
+    </div>
     <script>
         fetch('navbar.html')
             .then(response => response.text())
@@ -35,7 +40,52 @@
                 console.error('Error loading navigation bar:', error);
             });
     </script>
+    <script>
+        fetch('/Projects/backend/api/doses.cfm')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+
+                var columns = data.COLUMNS;
+                var rowData = data.DATA;
+                const labels = rowData.map(point => point[0]);
+                const values = rowData.map(point => point[1]);
+
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                    label: 'Cumulative Doses in Millions',
+                    data: values,
+                    fill: false,
+                    }]
+                },
+                options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Weeks'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Rates'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                });
+    </script>
 
 </body>
-<p>Distribution Page</p>
 </html>
