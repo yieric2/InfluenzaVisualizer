@@ -39,9 +39,7 @@
     <script>
         // JavaScript code to retrieve data from ColdFusion REST API
         const endpointUrl = "../back-end/api.cfm/doses";
-        let doses = [];
-        let weekOrder = [];
-
+        var cumulDoses = {};
         function fetchData() {
             fetch(endpointUrl)
                 .then(response => {
@@ -53,17 +51,26 @@
                 .then(data => {
                     // Output data to console
                     data.forEach(item => {
-                        const container = document.getElementById("dataContainer");
-                        const paragraph = document.createElement("p");
-                        paragraph.textContent = `WEEK START DATE: ${item['WeekStartDate'.toUpperCase()]}, WEEK END DATE: ${item['WeekEndDate'.toUpperCase()]}, SEASON: ${item['Season'.toUpperCase()]}, CUMULATIVE DOSES: ${item['CumulativeDoses'.toUpperCase()]}, WEEK SEASON ORDER: ${item['WeekSeasonOrder'.toUpperCase()]}`;
+
+                        const season = item['Season'.toUpperCase()];
                         const week = item['WeekSeasonOrder'.toUpperCase()];
-                        const cumulativeDoses = item['CumulativeDoses'.toUpperCase()];
-                        doses.push(cumulativeDoses);
-                        weekOrder.push(week);
+                        const doses = item['CumulativeDoses'.toUpperCase()];
+                        console.log(week);
+                        if (!cumulDoses[season]) {
+                            cumulDoses[season] = [];
+                        }
+
+                        cumulDoses[season].push({ week: week, doses: doses });
+
+
                         //  container.appendChild(paragraph);
+
                     });
                     // Render chart after data is fetched and processed, otherwise would yield issues
+                    // console.log(sameSeason);
+                    // console.log(cumulDoses);
                     renderChart();
+
                 })
                 .catch(error => {
                     console.error("Fetch error:", error);
@@ -72,19 +79,39 @@
 
         function renderChart() {
             const ctx = document.getElementById('myChart');
-            console.log(doses);
-            console.log(weekOrder);
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: weekOrder,
-                    datasets: [{
-                        label: 'Cumulative Doses: 2018-2019 Influenza Season',
-                        data: doses,
-                        borderColor: 'blue'
-                    }]
+            let seen = false
+            var influenza = { // this dataset is used to graph multiple lines
+                labels: [],
+                datasets: [],
+
+            }
+            for (let i = 0; i <= 31; i++) {
+                influenza.labels.push(i); // label is populated using for loop
+            }
+            for (var season in cumulDoses) {
+
+                var doses = cumulDoses[season].map(obj => obj.doses); // doses are retrieved from the cumulDose array for specific season
+
+
+                var temp = {
+                    data: doses,
+                    label: season
                 }
+                influenza.datasets.push(temp); // for each season, push its dataset
+
+
+            }
+
+
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: influenza // data is dataset, each index is a line on the graph
+
+
+
             });
+
+
         }
 
         // Call fetchData function
