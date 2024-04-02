@@ -11,7 +11,21 @@
 
 <body>
     <header id="navbar"></header>
-    <p style="font-weight: bold; font-size: 20px; margin-left: 400px; margin-top: 50px;">Weekly Hospitalization Rates: 2022 - 2023</p>
+    <p style="font-weight: bold; font-size: 20px; margin-left: 400px; margin-top: 50px;">Weekly Hospitalization Rates:
+        2022 - 2023</p>
+    <select id="yearDropdown"></select>
+    <select id="categoryDropdown">
+        <option value="age">age</option>
+        <option value="sex">sex</option>
+        <option value="race">race</option>
+        <option value="site">site</option>
+    </select>
+    <select id="optionDropdown"></select>
+    <input type="radio" id="cumulative_rate" name="options" value="cumulative_rate" checked>
+    <label for="option1">Cumulative</label><br>
+    <input type="radio" id="weekly_rate" name="options" value="weekly_rate">
+    <label for="option2">Weekly</label><br>
+
     <div class="chart-container">
         <canvas id="lineChart"></canvas>
     </div>
@@ -41,53 +55,213 @@
                 console.error('Error loading navigation bar:', error);
             });
     </script>
+
     <script>
-        fetch('/Projects/backend/api/hospitalizations.cfm')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data received:', data);
+        //Listeners to populate Drop Downs Dynamically
+        document.addEventListener('DOMContentLoaded', fetchAges);
+        document.addEventListener('DOMContentLoaded', fetchYears);
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('categoryDropdown').addEventListener('change', updateIt);
+        });
 
-                var columns = data.COLUMNS;
-                var rowData = data.DATA;
+        //Function to update the selected Drop Down with options
+        function updateIt() {
+            var selectedThing = document.getElementById('categoryDropdown').value;
+            if (selectedThing == 'age') {
+                fetchAges();
+            }
+            else if (selectedThing == 'sex') {
+                fetchSexes()
+            }
+            else if (selectedThing == 'race') {
+                fetchRaces();
+            }
+            else if (selectedThing == 'site') {
+                fetchSites()
+            }
+            else {
+                console.log("error")
+            }
 
-                var labels = rowData.map(row => row[0].slice(0, 10));
-                var weeklyRates = rowData.map(row => row[1]);
-                console.log(labels)
+        }
 
-                var ctx = document.getElementById('lineChart').getContext('2d');
-                var lineChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Weekly Rate per 100,000',
-                            data: weeklyRates,
-                            borderColor: 'blue',
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
+        //These functions dynamically fetch from the database for the options in the category
+        function fetchSexes() {
+            fetch('/Projects/backend/api/Page4Apis/GetSexes.cfm')
+                .then(response => response.json())
+                .then(data => {
+                    populateOptionDropdown(data.DATA);
+                })
+                .catch(error => {
+                    console.error('Error fetching sexes:', error);
+                });
+        }
+        function fetchSites() {
+            fetch('/Projects/backend/api/Page4Apis/GetSites.cfm')
+                .then(response => response.json())
+                .then(data => {
+                    populateOptionDropdown(data.DATA);
+                })
+                .catch(error => {
+                    console.error('Error fetching sites:', error);
+                });
+        }
+        function fetchAges() {
+            fetch('/Projects/backend/api/Page4Apis/GetAges.cfm')
+                .then(response => response.json())
+                .then(data => {
+                    populateOptionDropdown(data.DATA);
+                })
+                .catch(error => {
+                    console.error('Error fetching ages:', error);
+                });
+        }
+        function fetchRaces() {
+            fetch('/Projects/backend/api/Page4Apis/GetRaces.cfm')
+                .then(response => response.json())
+                .then(data => {
+                    populateOptionDropdown(data.DATA);
+                })
+                .catch(error => {
+                    console.error('Error fetching races:', error);
+                });
+        }
+        function fetchYears() {
+            fetch('/Projects/backend/api/Page4Apis/GetYears.cfm')
+                .then(response => response.json())
+                .then(data => {
+                    data.DATA.shift()
+                    populateDropdown(data.DATA);
+                })
+                .catch(error => {
+                    console.error('Error fetching years:', error);
+                });
+        }
+
+        //Populate the drop down and when the category changes, activate handleInputChange()
+        function populateOptionDropdown(choices) {
+            var dropdown = document.getElementById('optionDropdown');
+            dropdown.innerHTML = '';
+
+            choices.forEach(function (choice) {
+                var option = document.createElement('option');
+                option.text = choice;
+                option.value = choice;
+                dropdown.appendChild(option);
+            });
+            handleInputChange()
+
+        }
+        function populateDropdown(years) {
+            var dropdown = document.getElementById('yearDropdown');
+            dropdown.innerHTML = '';
+
+            years.forEach(function (year) {
+                var option = document.createElement('option');
+                option.text = year;
+                option.value = year;
+                dropdown.appendChild(option);
+            });
+
+        }
+        var lineChart;
+        document.addEventListener('DOMContentLoaded', fetchData(2019, 'overall', 'overall', '0-<1 year', 'overall', 'cumulative_rate'));
+
+
+        //Add listeners for the second drop down of options
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('yearDropdown').addEventListener('change', handleInputChange);
+            document.getElementById('optionDropdown').addEventListener('change', handleInputChange);
+            var radioButtons = document.querySelectorAll('input[type="radio"][name="options"]');
+            radioButtons.forEach(function (radioButton) {
+                radioButton.addEventListener('change', handleInputChange);
+            });
+        });
+
+        function handleInputChange() {
+            var selectedThing = document.getElementById('categoryDropdown').value;
+            var selectedAge = 'overall'
+            var selectedSex = 'overall'
+            var selectedRace = 'overall'
+            var selectedSite = 'overall'
+            if (selectedThing == 'age') {
+                selectedAge = document.getElementById('optionDropdown').value;
+            }
+            else if (selectedThing == 'sex') {
+                selectedSex = document.getElementById('optionDropdown').value;
+            }
+            else if (selectedThing == 'race') {
+                selectedRace = document.getElementById('optionDropdown').value;
+            }
+            else if (selectedThing == 'site') {
+                selectedSite = document.getElementById('optionDropdown').value;
+            }
+            else {
+                console.log("error")
+            }
+            var selectedYear = document.getElementById('yearDropdown').value;
+            var selectedOption = document.querySelector('input[type="radio"][name="options"]:checked').value;
+            fetchData(selectedYear, selectedRace, selectedSex, selectedAge, selectedSite, selectedOption);
+        }
+
+
+        function fetchData(year, race, sex, age, site, rate) {
+            var age2 = encodeURIComponent(age);
+            var url = `/Projects/backend/api/Page4Apis/hospitalizations.cfm?year=${year}&age=${age2}&race=${race}&sex=${sex}&site=${site}&rate=${rate}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (lineChart) {
+                        lineChart.destroy();
+                    }
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+        //Update the graph
+        function updateChart(data) {
+            var columns = data.COLUMNS;
+            var rowData = data.DATA;
+
+            var labels = rowData.map(row => row[0].slice(0, 10));
+            var weeklyRates = rowData.map(row => row[1]);
+
+            var ctx = document.getElementById('lineChart').getContext('2d');
+            lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Weekly Rate per 100,000',
+                        data: weeklyRates,
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: true,
+                            scaleLabel: {
                                 display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Dates'
-                                }
-                            },
-                            y: {
+                                labelString: 'Dates'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            scaleLabel: {
                                 display: true,
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Weekly Rates'
-                                }
+                                labelString: 'Weekly Rates'
                             }
                         }
                     }
-                });
-            })
+                }
+            });
+        }
     </script>
 </body>
 
