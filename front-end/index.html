@@ -69,7 +69,7 @@
                     // Render chart after data is fetched and processed, otherwise would yield issues
                     // console.log(sameSeason);
                     // console.log(cumulDoses);
-                    renderChart();
+                    renderChart(); // Default chart, all influenza season
 
                 })
                 .catch(error => {
@@ -114,8 +114,12 @@
 
         }
 
+
         // Call fetchData function
         fetchData();
+
+
+        // TODO: implement check box filters for the graph (season selection)
     </script>
 </body>
 
