@@ -3,6 +3,9 @@
 
 <head>
     <link rel="stylesheet" href="doses.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Influenza's vaccine doses in millions</title>
 </head>
 
@@ -22,9 +25,51 @@
             });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
     <h1 class="graph-title">Cumulative Doses in Millions</h1>
 
+    <div id="filters">
+        <button type="button" id="dropdown-btn" class="btn btn-outline-primary btn-sm">Filters</button>
+
+        <div id="dropdown-menu-graph" class="dropdown-menu-graph">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="form-check  form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Default checkbox
+                        </label>
+                    </div>
+                    <div class="form-check  form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Options 1
+                        </label>
+                    </div>
+                    <div class="form-check  form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            options 2
+                        </label>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="button" id="dropdown-btn" class="btn btn-outline-primary btn-sm">Apply</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
     <div class="graph">
         <canvas id="myChart"></canvas>
     </div>
@@ -38,6 +83,11 @@
     <div id="dataContainer"></div>
     <script>
         // JavaScript code to retrieve data from ColdFusion REST API
+
+        document.getElementById("dropdown-btn").addEventListener("click", function () {
+            var dropdownContent = document.getElementById("dropdown-menu-graph");
+            dropdownContent.classList.toggle("show");
+        });
         const endpointUrl = "../back-end/api.cfm/doses";
         var cumulDoses = {};
         function fetchData() {
@@ -77,7 +127,7 @@
                 });
         }
 
-        function renderChart() {
+        function renderChart() { // default behavior
             const ctx = document.getElementById('myChart');
             let seen = false
             var influenza = { // this dataset is used to graph multiple lines
@@ -106,9 +156,14 @@
             var chart = new Chart(ctx, {
                 type: 'line',
                 data: influenza // data is dataset, each index is a line on the graph
+                , options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',// Move legend to the bottom
 
-
-
+                        }
+                    }
+                }
             });
 
 

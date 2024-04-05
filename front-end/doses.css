@@ -56,11 +56,11 @@ nav a {
 }
 
 .graph {
-    border: solid;
+
     text-align: center;
     margin: 0 auto;
-    padding: 24px;
-    width: 80%;
+
+    width: 100%;
     height: 400px;
 
     display: flex;
@@ -68,7 +68,30 @@ nav a {
     justify-content: center;
 
     align-items: center;
+    position: relative;
 
+}
+
+#filters {
+    margin-left: 15%;
+}
+
+#dropdown-btn {
+    margin-left: 20%;
+
+}
+
+.dropdown-menu-graph {
+    display: none;
+    margin-left: 20%;
+    padding-top: 1%;
+
+
+
+}
+
+.dropdown-menu-graph.show {
+    display: flex;
 }
 
 canvas#MyChart {
@@ -78,18 +101,10 @@ canvas#MyChart {
 
 
 .graph-bottom {
+    justify-content: center;
+    align-items: center;
     text-align: center;
     font-size: 26px;
     display: flex;
-    margin-left: 84px;
-}
 
-.graph-stats {
-    margin-left: 144px;
-    margin-right: 144px;
-    padding: 12px;
-}
-
-.graph-description {
-    margin-right: 144px;
 }
