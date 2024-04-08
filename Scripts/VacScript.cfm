@@ -7,9 +7,14 @@
     <cfoutput>
     </cfoutput>
     <cfoutput>
+        <cfset Env =createObject("java","java.lang.System")>
+        <cfset db_name="CDC_DataSource">
+        <cfset db_user= Env.getProperty("db_user")>
+        <cfset db_table = Env.getProperty("table_name")>
+        <cfset db_password = Env.getProperty("db_pass")>
         <cftry>
         <cfscript>
-        csvFile = fileRead("C:\ColdFusion\cfusion\wwwroot\Projects\CSVFiles\Original_data.csv"); // might have to hide this data
+        csvFile = fileRead("C:\Users\AlexP\cfusion\wwwroot\App\CSVFile\Original_data.csv"); // might have to hide this data
         lines =  listToArray(csvFile, chr(10));
         myData = [];
         batchSize = 1065;
@@ -39,7 +44,7 @@
             return columns;
         }
         function create_point(required float lat, required float log) {
-            point = "POINT(" & lat & ' ' & log & ")";
+            point = "POINT(" & log & ' ' & lat & ")";
             return 'ST_PointFromText("' & point & '")';
             }
 
@@ -83,12 +88,12 @@
     </cfoutput>
     <cfoutput >
     <cftry>
-    <cfquery datasource="TestMySql">
-        TRUNCATE TABLE cdc_db.provider_locations
+    <cfquery datasource="#db_name#">
+        TRUNCATE TABLE #db_table#
     </cfquery>
         <cfloop from="1" to="#arrayLen(values)#" index="i">
-            <cfquery datasource="TestMySql">
-                INSERT INTO cdc_db.provider_locations (
+            <cfquery datasource="#db_name#">
+                INSERT INTO #db_table# (
                     provider_location_guid, loc_store_no, loc_phone, loc_name, loc_admin_street1, 
                     loc_admin_street2, loc_admin_city, loc_admin_state, loc_admin_zip, sunday_hours, 
                     monday_hours, tuesday_hours, wednesday_hours, thursday_hours, friday_hours, 

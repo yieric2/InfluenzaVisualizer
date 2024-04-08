@@ -1,7 +1,8 @@
 let map = null;
 const markers = [];
+
 async function initMap() {
-  const position = { lat: 44.098432, lng: -105.189222 };
+  const position = { lat: 40.098432, lng: -100.189222 };
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   map = new Map(
@@ -32,10 +33,14 @@ async function initMap() {
       position: provider.coords
     });
     const infoWindow = new google.maps.InfoWindow({
-      content: provider.city
+      content: `<h5> ${provider.city} </h5>` + `<p><b>Store number: ${provider.number}</b></p>`
     });
     marker.addListener("click", () => {
       infoWindow.open(map, marker);
+      setInterval (() => {
+        infoWindow.close(map, marker);
+      }
+      , 5000);
     });
     markers.push(marker);
   }
@@ -48,15 +53,15 @@ async function initMap() {
       const { COLUMNS, DATA } = json;
       const latIndex = COLUMNS.indexOf("LAT");
       const lngIndex = COLUMNS.indexOf("LNG");
+      const numberIndex = COLUMNS.indexOf("PHONENUM");
       const cityIndex = COLUMNS.indexOf("CITY");
       DATA.forEach((item) => {
         const latitude = item[latIndex];
         const longitude = item[lngIndex];
         const city = item[cityIndex];
-        console.log(latitude, longitude, city)
-        create_marker({ coords: { lat: latitude, lng: longitude }, city: city });
+        const number = item[numberIndex] 
+        create_marker({ coords: { lat: latitude, lng: longitude }, city: city, number: number});
       });
-
       const markerCluster = new markerClusterer.MarkerClusterer({ markers, map });
     })
     .catch((error) => {
