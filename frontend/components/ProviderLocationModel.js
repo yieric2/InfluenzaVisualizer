@@ -100,18 +100,18 @@ export default class ProviderLocation {
 
         const [openTime, closeTime] = hoursString.split('-');
         const [start, end] = [openTime.slice(-2) === 'AM' ? openTime.slice(0, -2) : openTime, closeTime.slice(-2) === 'AM' ? closeTime.slice(0, -2) : closeTime];
-    
-        const [openHour, openMinute] = start.split(':').map(Number);
-        const [closeHourRaw, closeMinute] = end.split(':').map(Number);
+        const [openHour, openMinute] =  start.substring(0,4).split(':').map(Number);
+        const [closeHourRaw, closeMinute] = end.substring(0,4).split(':').map(Number);
+        
         const closeHour = closeTime.slice(-2) === 'PM' && closeHourRaw < 12 ? closeHourRaw + 12 : closeHourRaw;
-    
+
         const convertedOpenHour = openTime.slice(-2) === 'PM' && openHour < 12 ? openHour + 12 : openHour;
         const convertedCloseHour = closeTime.slice(-2) === 'PM' && closeHour < 12 ? closeHour + 12 : closeHour;
-    
+
+
         const startMinutes = convertedOpenHour * 60 + openMinute;
         const endMinutes = convertedCloseHour * 60 + closeMinute;
         const nowMinutes = currentHour * 60 + currentMinute;
-    
         return nowMinutes >= startMinutes && nowMinutes < endMinutes;
     }
     

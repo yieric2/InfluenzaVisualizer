@@ -1,6 +1,5 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
 const APIKEY = '';
-let locations;
 let providerLocationArr = [];
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form');
