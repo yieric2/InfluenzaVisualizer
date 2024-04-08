@@ -1,5 +1,5 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
-const APIKEY = 'AIzaSyBv9HLYP-CUVWfHm8ttGYubsZ3gpWLQp-A';
+const APIKEY = '';
 let locations;
 let providerLocationArr = [];
 document.addEventListener('DOMContentLoaded', function() {
