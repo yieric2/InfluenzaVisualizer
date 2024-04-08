@@ -1,7 +1,7 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
-const APIKEY = 'YOUR_API_KEY';
-
-
+const APIKEY = 'AIzaSyBv9HLYP-CUVWfHm8ttGYubsZ3gpWLQp-A';
+let locations;
+let providerLocationArr = [];
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form');
   form.addEventListener('submit', function(event) {
@@ -49,31 +49,48 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
           console.log('Nearby Locations:', data);
-          // Look at map.js for reference on parsing
-          const locations = data.DATA.map(locationArray => {
-            const [ longitude, latitude, walkinsAccepted,insuranceAccepted, zip, city, state, streetAddr, phoneNumber, webAddr, MonHrs, TueHrs, WedHrs, thurHrs, friHrs, satHrs, sunHrs, distance ] = locationArray;
-            return new ProviderLocationModel({
-                longitude, 
-                latitude, 
-                walkinsAccepted,
-                insuranceAccepted,
-                zip, 
-                city, 
-                state,
-                streetAddr,
-                phoneNumber,
-                webAddr,
-                MonHrs,
-                TueHrs,
-                WedHrs,
-                thurHrs,
-                friHrs,
-                satHrs,
-                sunHrs,
-                distance
-            });
-        });
-          console.log('Provider Locations:', locations[0].WeekHours());
+          data.DATA.forEach((loc) =>{
+            const latitude = loc[0];
+            const longitude = loc[1];
+            const walkinsAccepted = loc[2];
+            const insuranceAccepted = loc[3];
+            const zip = loc[4];
+            const city = loc[5];
+            const state = loc[6];
+            const streetAddr = loc[7];
+            const phoneNumber = loc[8];
+            const webAddr = loc[9];
+            const MonHrs = loc[10];
+            const TueHrs = loc[11];
+            const WedHrs = loc[12];
+            const ThurHrs = loc[13];
+            const FriHrs = loc[14];
+            const SatHrs = loc[15];
+            const SunHrs = loc[16];
+            const distance = loc[17];
+            console.log('Location:', loc);
+            providerLocationArr.push(new ProviderLocationModel({
+              longitude : longitude,
+              longitude : latitude,
+              walkinsAccepted : walkinsAccepted,
+              insuranceAccepted : insuranceAccepted,
+              locAdminZip : zip,
+              locAdminCity : city,
+              locAdminState : state,
+              locAdminStreet1 : streetAddr,
+              locPhone : phoneNumber,
+              webAddress : webAddr,
+              mondayHours : MonHrs,
+              tuesdayHours : TueHrs,
+              wednesdayHours : WedHrs,
+              thursdayHours : ThurHrs,
+              fridayHours : FriHrs,
+              saturdayHours : SatHrs,
+              sundayHours : SunHrs,
+              distance : distance
+            }));
+          })
+          console.log('Provider Locations:', providerLocationArr[0].WeekHours());
         })
         .catch(error => {
           console.error('Error:', error);
