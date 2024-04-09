@@ -55,6 +55,11 @@ nav a {
     text-align: center;
 }
 
+#myChart {
+    max-height: 70vh;
+}
+
+
 .dropdown-menu {
     max-height: 280px;
     overflow-y: auto;
