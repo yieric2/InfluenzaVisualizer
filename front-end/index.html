@@ -37,39 +37,7 @@
 
     <h1 class="graph-title">Cumulative Doses in Millions</h1>
 
-    <div id="filters">
-        <button type="button" id="dropdown-btn" class="btn btn-outline-primary btn-sm">Filters</button>
 
-        <div id="dropdown-menu-graph" class="dropdown-menu-graph">
-            <div class="row">
-                <div class="col-auto">
-                    <div class="form-check  form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check  form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Options 1
-                        </label>
-                    </div>
-                    <div class="form-check  form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            options 2
-                        </label>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <button type="button" id="dropdown-btn" class="btn btn-outline-primary btn-sm">Apply</button>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
     <div class="graph">
         <canvas id="myChart"></canvas>
     </div>
@@ -77,17 +45,12 @@
     <div class="graph-bottom">
 
         <div class="graph-description">
-            This graph showcases the cumulative doses for the 2018-2019 influenza season
         </div>
     </div>
     <div id="dataContainer"></div>
     <script>
         // JavaScript code to retrieve data from ColdFusion REST API
 
-        document.getElementById("dropdown-btn").addEventListener("click", function () {
-            var dropdownContent = document.getElementById("dropdown-menu-graph");
-            dropdownContent.classList.toggle("show");
-        });
         const endpointUrl = "../back-end/api.cfm/doses";
         var cumulDoses = {};
         function fetchData() {
@@ -134,6 +97,7 @@
                 labels: [],
                 datasets: [],
 
+
             }
             for (let i = 0; i <= 31; i++) {
                 influenza.labels.push(i); // label is populated using for loop
@@ -155,16 +119,48 @@
 
             var chart = new Chart(ctx, {
                 type: 'line',
-                data: influenza // data is dataset, each index is a line on the graph
-                , options: {
+                data: influenza,
+                options: {
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Weeks'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Cumulative Doses (Millions)'
+                            }
+                        }
+                    },
                     plugins: {
-                        legend: {
-                            position: 'bottom',// Move legend to the bottom
+                        tooltip: {
+                            callbacks: { // called for hovering
+                                title: function (context) {
+                                    var title = 'Week: ' + context[0].label; // Display week number
+                                    return title;
+                                },
 
+                                label: function (context) {
+                                    var label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' million doses'; // doses in millions 
+                                    }
+                                    return label;
+                                }
+                            }
                         }
                     }
                 }
             });
+
 
 
         }
