@@ -88,26 +88,43 @@
                     startDropdownMenu.appendChild(weekItem);
                 }
 
-                function getEndMenu(index) {
-                    console.log(index);
+                function getEndMenu(startIndex) {
+
                     const endDropdownMenu = document.getElementById("endWeekDropdown");
                     const endDropdownName = document.getElementById("dropdownMenuButtonEnd");
                     endDropdownName.disabled = false;
                     endDropdownMenu.innerHTML = '';
                     endDropdownName.textContent = "Select Week";
 
-                    for (let i = index + 1; i <= 31; i++) {
+                    for (let i = startIndex + 1; i <= 31; i++) {
                         const weekItemEnd = document.createElement("a");
                         weekItemEnd.classList.add("dropdown-item");
                         weekItemEnd.href = "#";
                         weekItemEnd.textContent = "Week " + i;
                         weekItemEnd.addEventListener("click", function () {
                             endDropdownName.textContent = "Week " + i;
+                            updateGraph(startIndex, i); // i = end index
+
                         });
                         endDropdownMenu.appendChild(weekItemEnd);
 
                     }
 
+                }
+
+                function updateGraph(startIndex, endIndex) {
+                    const ctx = document.getElementById('myChart');
+                    const chart = Chart.getChart(ctx);
+
+                    // Update chart data with new start and end weeks
+                    const labels = [];
+                    for (let i = startIndex; i <= endIndex; i++) {
+                        labels.push("Week " + i);
+                    }
+                    chart.data.labels = labels;
+
+                    // Update the chart
+                    chart.update();
                 }
 
             </script>
