@@ -55,56 +55,7 @@ nav a {
     text-align: center;
 }
 
-.graph {
-
-    text-align: center;
-    margin: 0 auto;
-
-    width: 100%;
-    height: 400px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-    position: relative;
-
-}
-
-#filters {
-    margin-left: 15%;
-}
-
-#dropdown-btn {
-    margin-left: 20%;
-
-}
-
-.dropdown-menu-graph {
-    display: none;
-    margin-left: 20%;
-    padding-top: 1%;
-
-
-
-}
-
-.dropdown-menu-graph.show {
-    display: flex;
-}
-
-canvas#MyChart {
-    width: 100%;
-    height: 100%;
-}
-
-
-.graph-bottom {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 26px;
-    display: flex;
-
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
 }
