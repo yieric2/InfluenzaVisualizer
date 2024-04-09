@@ -1,14 +1,15 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
-const APIKEY = '';
+const APIKEY = '{YOUR_API_KEY}';
 let providerLocationArr = [];
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form');
   form.addEventListener('submit', function(event) {
     event.preventDefault(); 
     const addressInput = document.getElementById('location');
+    const providerListElement = document.getElementById('providers'); 
+    providerListElement.innerHTML = ''; 
     const address = addressInput.value.trim(); 
-
-    
+    addressInput.value = '';
     if (address) { 
       console.log('Entered Address:', address);
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${APIKEY}`)
@@ -67,10 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const SatHrs = loc[15];
             const SunHrs = loc[16];
             const distance = loc[17];
-            console.log('Location:', loc);
             providerLocationArr.push(new ProviderLocationModel({
               longitude : longitude,
-              longitude : latitude,
+              latitude : latitude,
               walkinsAccepted : walkinsAccepted,
               insuranceAccepted : insuranceAccepted,
               locAdminZip : zip,
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
               distance : distance
             }));
           })
-          console.log('Provider Locations:', providerLocationArr[0].WeekHours());
+          populateProviderList();
         })
         .catch(error => {
           console.error('Error:', error);
@@ -97,7 +97,27 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       console.error('Invalid Address');
     }
-    addressInput.value = '';
+
+    function populateProviderList() {
+      console.log("Content",providerListElement.innerHTML)
+      console.log("Content: a",a.innerHTML)
+      providerLocationArr.forEach(providerLocation => {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.classList.add('list-group-item', 'list-group-item-action', 'flex-column', 'align-items-start');
+        a.innerHTML = `
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">${providerLocation.getFullAddress()}</h5>
+            <small>${providerLocation.distance} km</small>
+          </div>
+          <p class="mb-1">Phone: ${providerLocation.locPhone}</p>
+          <p class="mb-1">Web: ${providerLocation.webAddress}</p>
+          <p class="mb-1">Hours: ${providerLocation.WeekHours()}</p>
+          <small>Walk-ins: ${providerLocation.acceptsWalkIns()} Insurance: ${providerLocation.acceptsInsurance()}</small>
+        `;
+        providerListElement.appendChild(a); 
+      });
+    }    
   }
   
   );

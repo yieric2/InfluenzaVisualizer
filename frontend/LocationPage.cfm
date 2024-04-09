@@ -33,13 +33,10 @@
 
         .container-fluid {
             text-align: center;
-            max-width: 100%;
-            margin: 0 auto;
         }
 
         #provider-list {
-            display: none;
-            margin-top: 50px;
+            border-left: 1px solid black;
         }
 
         .col-sm-6 button {
@@ -76,11 +73,9 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-        <div class="col-sm-6" id="provider-list">
-            <h2>Provider List</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Provider 1</li>
-            </ul>
+        <div class="col-md-6" id="provider-list">
+            <h2>Providers</h2>
+            <ul class="list-group" id="providers"></ul>
         </div>
     </div>
 </div>
