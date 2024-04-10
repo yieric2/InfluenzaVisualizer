@@ -36,20 +36,6 @@
             });
 
 
-        function resizeChart() {
-            const canvas = document.getElementById('myChart');
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-            const chart = Chart.getChart(canvas);
-            chart.resize();
-        }
-
-        // Event listener for window resize and fullscreenchange
-        window.addEventListener('resize', resizeChart);
-        document.addEventListener('fullscreenchange', resizeChart);
-        document.addEventListener('webkitfullscreenchange', resizeChart);
-        document.addEventListener('mozfullscreenchange', resizeChart);
-        document.addEventListener('MSFullscreenChange', resizeChart);
 
 
 
@@ -174,18 +160,17 @@
 
 
         </div>
+        <canvas id="myChart"></canvas>
     </div>
 
 
 
-    <div class="row justify-content-center mt-2">
-        <div class="col-8">
-            <canvas id="myChart"></canvas>
-        </div>
-    </div>
+
+
 
     <div class="row justify-content-center">
         <div class="col-8 mt-2">
+
             <div class=" graph-bottom">
 
                 <div class="graph-description">
@@ -294,6 +279,8 @@
 
                 options: {
                     scales: {
+
+
                         x: {
                             display: true,
                             title: {
@@ -357,6 +344,10 @@
         }
         // Call fetchData function
         fetchData();
+
+
+
+
 
 
     </script>
