@@ -111,21 +111,45 @@
                     }
 
                 }
+                // Define global variable to store original datasets
+                let originalDatasets = [];
 
                 function updateGraph(startIndex, endIndex) {
                     const ctx = document.getElementById('myChart');
                     const chart = Chart.getChart(ctx);
 
+                    // Check if original datasets are already stored
+                    if (originalDatasets.length === 0) {
+                        // Store original datasets if not already stored
+                        originalDatasets = JSON.parse(JSON.stringify(chart.data.datasets));
+                    }
+
                     // Update chart data with new start and end weeks
                     const labels = [];
+                    const datasets = [];
+
                     for (let i = startIndex; i <= endIndex; i++) {
-                        labels.push("Week " + i);
+                        labels.push("Week " + i); // update x axis label
                     }
+
+                    // Iterate through each dataset (line graph) and update its data array
+                    for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
+                        const originalData = originalDatasets[datasetIndex].data;
+                        // console.log(datasetIndex);
+                        // console.log(originalData);
+                        const updatedData = originalData.slice(startIndex - 1, endIndex); // slice data into only portion we need
+                        datasets.push({ label: originalDatasets[datasetIndex].label, data: updatedData }); // push onto new dataset
+                    }
+
+                    // Update the chart's labels and datasets
                     chart.data.labels = labels;
+                    chart.data.datasets = datasets;
 
                     // Update the chart
                     chart.update();
                 }
+
+
 
             </script>
 
@@ -235,7 +259,8 @@
                     },
                     plugins: {
                         tooltip: {
-                            callbacks: { // called for hovering
+                            callbacks: { // hovering over specific data point on line graph
+                                // We're adding more info for the user. 
                                 title: function (context) {
                                     var title = 'Week: ' + context[0].label; // Display week number
                                     return title;
