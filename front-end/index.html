@@ -53,113 +53,134 @@
     <div class="container">
         <div class="row justify-content-center">
 
+
+
             <div class="dropdown" id="start">
                 From :
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select Week
+                    Week 1
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonStart" id="startWeekDropdown">
                 </div>
             </div>
-            <div class="dropdown ml-2" id="end">
+            <div class="dropdown " id="end">
                 To :
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
-                    Select Week
+                    Week 31
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonEnd" id="endWeekDropdown">
 
                 </div>
 
+
             </div>
-            <script>
-                // Get the dropdown menu
-                const startDropdownMenu = document.getElementById("startWeekDropdown");
-                const startDropdownName = document.getElementById("dropdownMenuButtonStart");
-                // Loop to create 31 weeks
-                for (let i = 1; i <= 31; i++) {
-                    // Create a new <a> element for each week dynamically
-                    const weekItem = document.createElement("a");
-                    weekItem.classList.add("dropdown-item");
-                    weekItem.href = "#";
-                    weekItem.textContent = "Week " + i;
-                    weekItem.addEventListener("click", function () {
-                        // Change the button text to the selected week
-                        startDropdownName.textContent = "Week " + i;
-                        getEndMenu(i);
-                    });
-                    // Append the week item to the dropdown menu
-                    startDropdownMenu.appendChild(weekItem);
-                }
+            <div class="dropdown ml-2" id="start">
 
-                function getEndMenu(startIndex) {
+                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="chartType"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Chart Type
+                </button>
+                <div class="dropdown-menu" aria-labelledby="chartType" id="graphFilter">
+                    <a class="dropdown-item" href="#" id="lineGraph">Line (default)</a>
 
-                    const endDropdownMenu = document.getElementById("endWeekDropdown");
-                    const endDropdownName = document.getElementById("dropdownMenuButtonEnd");
-                    endDropdownName.disabled = false;
-                    endDropdownMenu.innerHTML = '';
-                    endDropdownName.textContent = "Select Week";
+                    <a class="dropdown-item" href="#" id="barGraph">Bar</a>
+                    <a class="dropdown-item" href="#" id="scatterGraph">Scatter</a>
+                </div>
 
-                    for (let i = startIndex + 1; i <= 31; i++) {
-                        const weekItemEnd = document.createElement("a");
-                        weekItemEnd.classList.add("dropdown-item");
-                        weekItemEnd.href = "#";
-                        weekItemEnd.textContent = "Week " + i;
-                        weekItemEnd.addEventListener("click", function () {
-                            endDropdownName.textContent = "Week " + i;
-                            updateGraph(startIndex, i); // i = end week index
-
-                        });
-                        endDropdownMenu.appendChild(weekItemEnd);
-
-                    }
-
-                }
-                // Keep track of OG dataset
-                let originalDatasets = [];
-
-                function updateGraph(startIndex, endIndex) {
-                    const ctx = document.getElementById('myChart');
-                    const chart = Chart.getChart(ctx);
-
-                    // Check if original datasets are already stored
-                    if (originalDatasets.length === 0) {
-                        // Store original datasets if not already stored
-                        originalDatasets = JSON.parse(JSON.stringify(chart.data.datasets));
-                    }
-
-                    // Update chart data with new start and end weeks
-                    const labels = [];
-                    const datasets = [];
-
-                    for (let i = startIndex; i <= endIndex; i++) {
-                        labels.push("Week " + i); // update x axis label
-                    }
-
-                    // Iterate through each dataset (seasons) and update its data array
-                    for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
-                        const originalData = originalDatasets[datasetIndex].data;
-                        // console.log(datasetIndex);
-                        // console.log(originalData);
-                        const updatedData = originalData.slice(startIndex - 1, endIndex); // slice data into only portion we need
-                        datasets.push({ label: originalDatasets[datasetIndex].label, data: updatedData }); // push onto new dataset
-                    }
-
-                    // Update the chart's labels and datasets
-                    chart.data.labels = labels;
-                    chart.data.datasets = datasets;
-
-                    // Update the chart
-                    chart.update();
-                }
-
-
-
-            </script>
-
-
+            </div>
         </div>
+        <script>
+            // Get the dropdown menu
+
+
+
+
+            const startDropdownMenu = document.getElementById("startWeekDropdown");
+            const startDropdownName = document.getElementById("dropdownMenuButtonStart");
+            // Loop to create 31 weeks
+            for (let i = 1; i <= 31; i++) {
+                // Create a new <a> element for each week dynamically
+                const weekItem = document.createElement("a");
+                weekItem.classList.add("dropdown-item");
+                weekItem.href = "#";
+                weekItem.textContent = "Week " + i;
+                weekItem.addEventListener("click", function () {
+                    // Change the button text to the selected week
+                    startDropdownName.textContent = "Week " + i;
+                    getEndMenu(i);
+                });
+                // Append the week item to the dropdown menu
+                startDropdownMenu.appendChild(weekItem);
+            }
+
+            function getEndMenu(startIndex) {
+
+                const endDropdownMenu = document.getElementById("endWeekDropdown");
+                const endDropdownName = document.getElementById("dropdownMenuButtonEnd");
+                endDropdownName.disabled = false;
+                endDropdownMenu.innerHTML = '';
+                endDropdownName.textContent = "Select Week";
+
+                for (let i = startIndex + 1; i <= 31; i++) {
+                    const weekItemEnd = document.createElement("a");
+                    weekItemEnd.classList.add("dropdown-item");
+                    weekItemEnd.href = "#";
+                    weekItemEnd.textContent = "Week " + i;
+                    weekItemEnd.addEventListener("click", function () {
+                        endDropdownName.textContent = "Week " + i;
+                        updateGraph(startIndex, i); // i = end week index
+
+                    });
+                    endDropdownMenu.appendChild(weekItemEnd);
+
+                }
+
+            }
+            // Keep track of OG dataset
+            let originalDatasets = [];
+
+            function updateGraph(startIndex, endIndex) {
+                const ctx = document.getElementById('myChart');
+                const chart = Chart.getChart(ctx);
+
+                // Check if original datasets are already stored
+                if (originalDatasets.length === 0) {
+                    // Store original datasets if not already stored
+                    originalDatasets = JSON.parse(JSON.stringify(chart.data.datasets));
+                }
+
+                // Update chart data with new start and end weeks
+                const labels = [];
+                const datasets = [];
+
+                for (let i = startIndex; i <= endIndex; i++) {
+                    labels.push("Week " + i); // update x axis label
+                }
+
+                // Iterate through each dataset (seasons) and update its data array
+                for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
+                    const originalData = originalDatasets[datasetIndex].data;
+                    // console.log(datasetIndex);
+                    // console.log(originalData);
+                    const updatedData = originalData.slice(startIndex - 1, endIndex); // slice data into only portion we need
+                    datasets.push({ label: originalDatasets[datasetIndex].label, data: updatedData }); // push onto new dataset
+                }
+
+                // Update the chart's labels and datasets
+                chart.data.labels = labels;
+                chart.data.datasets = datasets;
+
+                // Update the chart
+                chart.update();
+            }
+
+
+
+        </script>
+
+
         <canvas id="myChart"></canvas>
     </div>
 
@@ -234,7 +255,7 @@
                         }
                     }
 
-                    renderChart(); // Default chart, all influenza season
+                    renderChart('line'); // Default chart, all influenza season
 
                 })
                 .catch(error => {
@@ -243,10 +264,12 @@
         }
 
 
+        let chart = null;
 
-
-
-        function renderChart() { // default behavior on page load
+        function renderChart(type) { // default behavior on page load
+            if (chart)
+                chart.destroy();
+            console.log(type);
             const ctx = document.getElementById('myChart');
             var influenza = { // this dataset is used to graph multiple lines
                 labels: [],
@@ -273,8 +296,8 @@
             }
 
             // TODO if possible make hoverable. 
-            var chart = new Chart(ctx, {
-                type: 'line',
+            chart = new Chart(ctx, {
+                type: type,
                 data: influenza,
 
                 options: {
@@ -285,7 +308,7 @@
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Weeks'
+                                text: 'Season Week'
                             }
                         },
                         y: {
@@ -346,6 +369,24 @@
         fetchData();
 
 
+        const lineGraph = document.getElementById("lineGraph");
+        const barGraph = document.getElementById("barGraph");
+        const scatterGraph = document.getElementById("scatterGraph");
+        lineGraph.addEventListener("click", function () {
+
+            renderChart('line');
+
+        });
+        barGraph.addEventListener("click", function () {
+
+            renderChart('bar');
+
+        });
+        scatterGraph.addEventListener("click", function () {
+
+            renderChart('scatter');
+
+        });
 
 
 
