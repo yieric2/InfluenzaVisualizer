@@ -74,7 +74,7 @@
                 const startDropdownName = document.getElementById("dropdownMenuButtonStart");
                 // Loop to create 31 weeks
                 for (let i = 1; i <= 31; i++) {
-                    // Create a new <a> element for each week
+                    // Create a new <a> element for each week dynamically
                     const weekItem = document.createElement("a");
                     weekItem.classList.add("dropdown-item");
                     weekItem.href = "#";
@@ -103,7 +103,7 @@
                         weekItemEnd.textContent = "Week " + i;
                         weekItemEnd.addEventListener("click", function () {
                             endDropdownName.textContent = "Week " + i;
-                            updateGraph(startIndex, i); // i = end index
+                            updateGraph(startIndex, i); // i = end week index
 
                         });
                         endDropdownMenu.appendChild(weekItemEnd);
@@ -111,7 +111,7 @@
                     }
 
                 }
-                // Define global variable to store original datasets
+                // Keep track of OG dataset
                 let originalDatasets = [];
 
                 function updateGraph(startIndex, endIndex) {
@@ -132,7 +132,7 @@
                         labels.push("Week " + i); // update x axis label
                     }
 
-                    // Iterate through each dataset (line graph) and update its data array
+                    // Iterate through each dataset (seasons) and update its data array
                     for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
                         const originalData = originalDatasets[datasetIndex].data;
                         // console.log(datasetIndex);
@@ -210,9 +210,8 @@
                 });
         }
 
-        function renderChart() { // default behavior
+        function renderChart() { // default behavior on page load
             const ctx = document.getElementById('myChart');
-            let seen = false
             var influenza = { // this dataset is used to graph multiple lines
                 labels: [],
                 datasets: [],
@@ -229,17 +228,19 @@
 
                 var temp = {
                     data: doses,
-                    label: season
+                    label: 'Season: ' + season // Adding "Season: " prefix to the label
+
                 }
-                influenza.datasets.push(temp); // for each season, push its dataset
+                influenza.datasets.push(temp); // for each year season, push its dataset
 
 
             }
 
-
+            // TODO if possible make hoverable. 
             var chart = new Chart(ctx, {
                 type: 'line',
                 data: influenza,
+
                 options: {
                     scales: {
                         x: {
@@ -255,8 +256,10 @@
                                 display: true,
                                 text: 'Cumulative Doses (Millions)'
                             }
-                        }
+                        },
+
                     },
+
                     plugins: {
                         tooltip: {
                             callbacks: { // hovering over specific data point on line graph
@@ -291,7 +294,6 @@
         fetchData();
 
 
-        // TODO: implement check box filters for the graph (season selection)
     </script>
 </body>
 
