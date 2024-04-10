@@ -46,6 +46,7 @@ nav a {
     text-decoration: none;
     display: flex;
     align-items: center;
+
 }
 
 #navbar a.active {
