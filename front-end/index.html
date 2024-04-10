@@ -161,18 +161,33 @@
 
 
     <canvas id="myChart"></canvas>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class=" graph-bottom">
 
-    <div class="graph-bottom">
-
-        <div class="graph-description">
+                <div class="graph-description">
+                    Overall, the <span id="seasonHigh" style="color: green; font-weight: bold;"></span> Season had the
+                    most amount of doses
+                    distributed with
+                    <span id="dosesHigh" style="color: green; font-weight: bold;"></span> millions doses distributed at
+                    the end of the
+                    Season.
+                    On the other hand, the <span id="seasonLow" style="color: red; font-weight: bold;"></span> Season
+                    had the lowest amount
+                    of doses
+                    distributed with
+                    <span id="dosesLow" style="color: red; font-weight: bold;"></span> millions doses distributed at the
+                    end of the Season.
+                </div>
+            </div>
         </div>
     </div>
-    <div id="dataContainer"></div>
     <script>
-        // JavaScript code to retrieve data from ColdFusion REST API
 
         const endpointUrl = "../back-end/api.cfm/doses";
         var cumulDoses = {};
+        var allTimeHigh = null;
+        var allTimeLow = null;
         function fetchData() {
             fetch(endpointUrl)
                 .then(response => {
@@ -188,7 +203,10 @@
                         const season = item['Season'.toUpperCase()];
                         const week = item['WeekSeasonOrder'.toUpperCase()];
                         const doses = item['CumulativeDoses'.toUpperCase()];
-                        console.log(week);
+                        if (!allTimeHigh || doses > allTimeHigh.doses) {
+                            allTimeHigh = { season: season, doses: doses };
+                        }
+
                         if (!cumulDoses[season]) {
                             cumulDoses[season] = [];
                         }
@@ -199,9 +217,15 @@
                         //  container.appendChild(paragraph);
 
                     });
-                    // Render chart after data is fetched and processed, otherwise would yield issues
-                    // console.log(sameSeason);
-                    // console.log(cumulDoses);
+                    for (const season in cumulDoses) {
+                        const dosesArray = cumulDoses[season];
+                        const lastDoses = dosesArray[dosesArray.length - 1].doses; // Accessing the last element of the array
+
+                        if (!allTimeLow || lastDoses < allTimeLow.doses) {
+                            allTimeLow = { season: season, doses: lastDoses };
+                        }
+                    }
+
                     renderChart(); // Default chart, all influenza season
 
                 })
@@ -209,6 +233,10 @@
                     console.error("Fetch error:", error);
                 });
         }
+
+
+
+
 
         function renderChart() { // default behavior on page load
             const ctx = document.getElementById('myChart');
@@ -286,10 +314,24 @@
             });
 
 
-
+            updateDescription();
         }
 
-
+        function updateDescription() {
+            const seasonHigh = document.getElementById("seasonHigh");
+            const dosesHigh = document.getElementById("dosesHigh");
+            const seasonLow = document.getElementById("seasonLow");
+            const dosesLow = document.getElementById("dosesLow");
+            console.log(allTimeHigh);
+            if (allTimeHigh) {
+                seasonHigh.textContent = allTimeHigh.season;
+                dosesHigh.textContent = allTimeHigh.doses;
+            }
+            if (allTimeLow) {
+                seasonLow.textContent = allTimeLow.season;
+                dosesLow.textContent = allTimeLow.doses;
+            }
+        }
         // Call fetchData function
         fetchData();
 
