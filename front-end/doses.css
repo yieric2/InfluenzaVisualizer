@@ -55,10 +55,13 @@ nav a {
 
 .graph-title {
     text-align: center;
+
+
 }
 
 #myChart {
     max-height: 70vh;
+    max-width: 95vw;
 }
 
 

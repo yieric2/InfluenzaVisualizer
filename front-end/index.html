@@ -34,6 +34,25 @@
             .catch(error => {
                 console.error('Error loading navigation bar:', error);
             });
+
+
+        function resizeChart() {
+            const canvas = document.getElementById('myChart');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            const chart = Chart.getChart(canvas);
+            chart.resize();
+        }
+
+        // Event listener for window resize and fullscreenchange
+        window.addEventListener('resize', resizeChart);
+        document.addEventListener('fullscreenchange', resizeChart);
+        document.addEventListener('webkitfullscreenchange', resizeChart);
+        document.addEventListener('mozfullscreenchange', resizeChart);
+        document.addEventListener('MSFullscreenChange', resizeChart);
+
+
+
     </script>
 
 
@@ -159,10 +178,14 @@
 
 
 
+    <div class="chart-container">
 
-    <canvas id="myChart"></canvas>
+        <canvas id="myChart"></canvas>
+
+    </div>
+
     <div class="row justify-content-center">
-        <div class="col-8">
+        <div class="col-8 mt-4">
             <div class=" graph-bottom">
 
                 <div class="graph-description">
