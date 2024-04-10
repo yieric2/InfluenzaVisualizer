@@ -9,6 +9,9 @@
   https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js
   "></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
     <cfquery datasource="MySQL_test" name="getAllGeography">
@@ -27,16 +30,18 @@
                 console.error('Error loading navigation bar:', error);
             });
     </script>
-    <div class="container mt-3">
-        <h1>Demographics for Influenza Vaccination Coverage</h1>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+    <div class="container mt-3 d-flex flex-column" style='height: calc(100% - 150px); font-family: "Roboto", sans-serif;'>
+        <h2>Demographics for Influenza Vaccination Coverage</h2>
+        <p>On this webpage, we present CDC-sourced data illustrating Influenza vaccination coverage across various demographics, visualized through a multiple bar graph. You can customize the display by clicking on the graph settings button. <strong>Note</strong>, options like <strong>"Any influenza vaccination Seasonal or H1N1"</strong> and <strong>"Influenza A (H1N1) 2009 Monovalent"</strong> apply solely to the <strong>2009 - 2010 season</strong>. Also, there's a limit of <strong>five selections</strong> for age groups and race/ethnicity. This data offers insights into vaccination trends, aiding efforts to improve strategies, promote equity, and lessen influenza's public health impact.</p>
         <!-- Button trigger modal -->
         <cfoutput >
-                <button type="button" class="btn btn-primary d-block my-3" data-bs-toggle="modal" data-bs-target="##coverageModal">
+                <button type="button" class="btn btn-primary d-block my-1 w-25" data-bs-toggle="modal" data-bs-target="##coverageModal">
                     Graph Setting
                 </button>    
         </cfoutput>
-        <canvas id="myChart"></canvas>
+        <div class="flex-grow-1">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="coverageModal" tabindex="-1" aria-labelledby="coverageModalLabel" aria-hidden="true">
@@ -109,12 +114,12 @@
                             <cfif getAllAgeGroup.ID EQ 1>
                                 <div class="d-flex flex-column justify-content-center align-items-center col-6 col-lg-3 py-2">
                                     <label class="form-check-label mb-1" for="age_group#getAllAgeGroup.ID#">#getAllAgeGroup.NAME#</label>
-                                    <input class="form-check-input" type="checkbox" id="age_group#getAllAgeGroup.ID#" name="age_group" value="#getAllAgeGroup.ID#" checked style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
+                                    <input class="form-check-input" type="checkbox" id="age_group#getAllAgeGroup.ID#" name="age_group" value="#getAllAgeGroup.ID#" checked onchange="checkLimit()" style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
                                 </div>
                             <cfelse>
                                 <div class="d-flex flex-column justify-content-center align-items-center col-6 col-lg-3 py-2">
                                     <label class="form-check-label mb-1" for="age_group#getAllAgeGroup.ID#">#getAllAgeGroup.NAME#</label>
-                                    <input class="form-check-input" type="checkbox" id="age_group#getAllAgeGroup.ID#" name="age_group" value="#getAllAgeGroup.ID#" style="width:1rem; height: 1rem; outline: 1px solid black !important;">
+                                    <input class="form-check-input" type="checkbox" id="age_group#getAllAgeGroup.ID#" name="age_group" value="#getAllAgeGroup.ID#" onchange="checkLimit()" style="width:1rem; height: 1rem; outline: 1px solid black !important;">
                                 </div>
                             </cfif>
                         </cfoutput>
@@ -134,17 +139,16 @@
                             <cfif getAllRace_ethn.ID EQ 4 || getAllRace_ethn.ID EQ 11>
                                 <div class="d-flex flex-column justify-content-center align-items-center col-6 col-lg-3 py-2">
                                     <label class="form-check-label mb-1" for="race_ethn#getAllRace_ethn.ID#">#getAllRace_ethn.NAME#</label>
-                                    <input class="form-check-input" type="checkbox" id="race_ethn#getAllRace_ethn.ID#" name="race_ethn" value="#getAllRace_ethn.ID#" checked style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
+                                    <input class="form-check-input" type="checkbox" id="race_ethn#getAllRace_ethn.ID#" name="race_ethn" value="#getAllRace_ethn.ID#" checked onchange="checkLimit()" style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
                                 </div>
                             <cfelse>
                                 <div class="d-flex flex-column justify-content-center align-items-center col-6 col-lg-3 py-2">
                                     <label class="form-check-label mb-1" for="race_ethn#getAllRace_ethn.ID#">#getAllRace_ethn.NAME#</label>
-                                    <input class="form-check-input" type="checkbox" id="race_ethn#getAllRace_ethn.ID#" name="race_ethn" value="#getAllRace_ethn.ID#" style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
+                                    <input class="form-check-input" type="checkbox" id="race_ethn#getAllRace_ethn.ID#" name="race_ethn" value="#getAllRace_ethn.ID#" onchange="checkLimit()" style="width:1rem; height: 1rem; outline: 1px solid ##696969 !important;">
                                 </div>
                             </cfif>
                         </cfoutput>
                     </div>
-                    
                 </div>
             </form>
         </div>
@@ -157,261 +161,5 @@
     </div>
     </div>
 </body>
-<script>
-    const coverage_form = document.getElementById("coverage_form");
-    // const formData = new FormData(coverage_form);
-    // const LIMIT = 5;
-    
-    // Initial dataset
-    const initialData = {
-      labels: ['January', 'February', 'March', 'April', 'May', "June", 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [{
-            label: 'White',
-            data: [39.6, 41.4, 42.2, 42.3, 43.4, 0, 0, 1.4, 8.8, 28, 34.7, 37],
-            borderWidth: 1,
-            borderRadius : 5
-            },{
-            label: 'Hispanic',
-            data: [39.6, 42.6, 42.6, 44, 44, 0, 0, 0, 13, 30.4, 35.9, 39.4],
-            borderWidth: 1,
-            borderRadius : 5
-            },
-            {
-            label: '18-49 Years at High Risk',
-            data: [24.8, 28.4, 28.4, 28.4, 28.4, 0, 0, 0, 0, 12.9, 17.1, 21.],
-            borderWidth: 1,
-            borderRadius : 5
-            }]
-    };
-    
-    const plugin = {
-    id: 'customCanvasBackgroundColor',
-    beforeDraw: (chart, args, options) => {
-        const {ctx} = chart;
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = options.color || '#99ffff';
-        ctx.fillRect(0, 0, chart.width, chart.height);
-        ctx.restore();
-    }
-    };
-
-    // Create chart
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: initialData,
-      options: {
-            responseive: true,
-            // maintainAspectRatio : false,
-            plugins: {
-                customCanvasBackgroundColor: {
-                    color: '#FCFCFC',
-                },
-                title: {
-                    display: true,
-                    text: 'Seasonal Influenza Coverage For Alabama : 2022 - 2023',
-                    font : {
-                        size : 18
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                },
-                x: {
-                    ticks : {
-                        maxRotation : 45,
-                        minRotation : 45
-                    }
-                },
-            },
-        },
-        plugins: [plugin]
-    });
-
-    const updateGeography = async () => {
-        try {
-            
-            // Get the geography type element
-            const geographyTypeDropdown = document.getElementById("geography_type");
-
-            // Get the selected option
-            const selectedOption = geographyTypeDropdown.options[geographyTypeDropdown.selectedIndex];
-
-            // Get the value of the selected option
-            const selectedValue = selectedOption.value;
-
-            const response = await fetch(`/Projects/api/getAllGeography.cfm?id=${selectedValue}`);
-            if (!response.ok) {
-                throw new Error('Bad status code from server');
-            }
-            const data = await response.json();
-
-            // Get the geography element
-            var geographyDropdown = document.getElementById("geography");
-
-            // Clear the Options
-            geographyDropdown.innerHTML = '';
-
-            // Insert new options
-            data.forEach(function(newOption) {
-                var optionElement = document.createElement("option");
-                optionElement.value = newOption.ID;
-                optionElement.text = newOption.NAME;
-                geographyDropdown.appendChild(optionElement);
-            })
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-    const alertTrigger = (message, type) => {
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-        const wrapper = document.createElement('div')
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('')
-
-        alertPlaceholder.append(wrapper);
-    }
-
-    const getCoverage = async() => {
-        try{
-            // Build body for coldfusion call
-            const body = {
-                influenza_type : null,
-                season : null,
-                geography_type : null,
-                geography : null,
-                age_group : [],
-                race_ethn : []
-            }
-            let checkboxCount = 0;
-
-            const coverage_form = document.getElementById("coverage_form");
-            const newFormData = new FormData(coverage_form);
-            // Extract the correct values and append to body
-            for(var pair of newFormData.entries()) 
-            {
-                let k = pair[0];
-                let v = pair[1];
-                if(k === 'age_group' || k === 'race_ethn'){
-                    body[`${k}`].push(v);
-                    checkboxCount += 1;
-                }
-                else{
-                    body[`${k}`] = v;
-                }
-            }
-
-            if(checkboxCount < 1){
-                alertTrigger("Must Have At Least One Age Group or Race/Ethnicity Marked", "danger");
-                throw new Error("Sorry, Must Have At Least One Age Group or Race/Ethnicity Marked");
-            }
-
-            // Get data
-            const response = await fetch("/ProjectS/api/getAllCoverage.cfm", {
-                method : "POST",
-                headers : {
-                    'Content-Type' : 'application/json'
-                },
-                body : JSON.stringify(body)
-            });
-
-            if (!response.ok) {
-                throw new Error('Bad status code from server');
-            }
-
-            const data = await response.json();
-            // Update graph 
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            var columns = data.COLUMNS;
-            var rowData = data.DATA;
-
-            // If no data then do not update
-            if(rowData.length === 0){
-                alertTrigger("Sorry No Data Available", "danger");
-                throw new Error("Sorry No Data");
-            }
-
-            var months = rowData.map(row => row[8]);
-            var rates = rowData.map(row => row[1]);
-            var dimensions = rowData.map(row => row[4]);
-
-            const labels = [1,2,3,4,5,6,7,8,9,10,11,12]
-            const datasets = [];
-
-            const uniqueDimensions = Array.from(new Set(dimensions));
-
-            uniqueDimensions.forEach(dimension => {
-            const dataset = {
-                label: dimension,
-                data: [],
-                borderWidth: 1,
-                borderRadius : 5
-            };
-
-            labels.forEach(month => {
-                const index = dimensions.findIndex((dim, i) => dim === dimension && months[i] === month);
-                if (index !== -1) {
-                    dataset.data.push(rates[index]);
-                } else {
-                    dataset.data.push(0);
-                }
-                });
-
-                datasets.push(dataset);
-            });
-            const formattedLabels = labels.map(label => monthNames[label - 1]); // Adjust month index
-            const ctx = document.getElementById('myChart').getContext('2d');
-            myChart.data.datasets = datasets;
-
-            // Update Title
-            // Get the geography element
-            const geographyDropdown = document.getElementById("geography");
-
-            // Get the selected option
-            const selectedGeographyOption = geographyDropdown.options[geographyDropdown.selectedIndex];
-
-            // Get the value of the selected option
-            const geographyName = selectedGeographyOption.text;
-
-            // Get the influenza type type element
-            const influenzaTypeDropdown = document.getElementById("influenza_type");
-
-            // Get the selected option
-            const selectedInfluenzaTypeOption = influenzaTypeDropdown.options[influenzaTypeDropdown.selectedIndex];
-
-            // Get the value of the selected option
-            const influenzaType = selectedInfluenzaTypeOption.text;
-
-            // Get the season element
-            const seasonDropdown = document.getElementById("season");
-
-            // Get the selected option
-            const selectedSeasonOption = seasonDropdown.options[seasonDropdown.selectedIndex];
-
-            // Get the value of the selected option
-            const season = selectedSeasonOption.text;
-
-            myChart.options.plugins.title.text = `${influenzaType} Coverage For ${geographyName} : ${season}`
-            myChart.update();
-
-            //Finally hide modal if everything is successful
-            var myModalEl = document.getElementById('coverageModal');
-            var modal = bootstrap.Modal.getInstance(myModalEl)
-            modal.hide();
-            
-        }
-        catch(error){
-            console.error("Error fetching data", error)
-        }
-    }
-</script>
+<script src="page2.js"></script>
 </html>
