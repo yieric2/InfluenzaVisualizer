@@ -42,21 +42,19 @@
     </script>
 
 
-    <h1 class="graph-title">Cumulative Doses in Millions</h1>
-
-    <div class="dropdown">
-
-    </div>
 
 
 
-    <div class="container">
-        <div class="row justify-content-center">
 
 
+    <div class="container mt-4">
+        <h1 class="text-center">Cumulative Doses in Millions</h1>
 
-            <div class="dropdown" id="start">
-                From :
+        <div class="row justify-content-center mb-1">
+
+
+            <div class="dropdown mr-2" id="start">
+                From:
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Week 1
@@ -64,11 +62,11 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonStart" id="startWeekDropdown">
                 </div>
             </div>
-            <div class="dropdown " id="end">
-                To :
+            <div class="dropdown mr-2" id="end">
+                To:
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
-                    Week 31
+                    Week 31 <!--RESET ON GRAPH CHANGE !!! TODO -->
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonEnd" id="endWeekDropdown">
 
@@ -77,7 +75,7 @@
 
             </div>
             <div class="dropdown ml-2" id="start">
-
+                Chart Type:
                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="chartType"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Chart Type
@@ -183,35 +181,40 @@
 
 
         <canvas id="myChart"></canvas>
-    </div>
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4 ml-4">
 
+                <div class=" graph-bottom">
 
-
-
-
-
-    <div class="row justify-content-center">
-        <div class="col-8 mt-2">
-
-            <div class=" graph-bottom">
-
-                <div class="graph-description">
-                    Overall, the <span id="seasonHigh" style="color: green; font-weight: bold;"></span> Season had the
-                    most amount of doses
-                    distributed with
-                    <span id="dosesHigh" style="color: green; font-weight: bold;"></span> millions doses distributed at
-                    the end of the
-                    Season.
-                    On the other hand, the <span id="seasonLow" style="color: red; font-weight: bold;"></span> Season
-                    had the lowest amount
-                    of doses
-                    distributed with
-                    <span id="dosesLow" style="color: red; font-weight: bold;"></span> millions doses distributed at the
-                    end of the Season.
+                    <div class="graph-description">
+                        Overall, the <span id="seasonHigh" style="color: green; font-weight: bold;"></span> Season had
+                        the
+                        most amount of doses
+                        distributed with
+                        <span id="dosesHigh" style="color: green; font-weight: bold;"></span> millions doses distributed
+                        at
+                        the end of the
+                        Season.
+                        On the other hand, the <span id="seasonLow" style="color: red; font-weight: bold;"></span>
+                        Season
+                        had the lowest amount
+                        of doses
+                        distributed with
+                        <span id="dosesLow" style="color: red; font-weight: bold;"></span> millions doses distributed at
+                        the
+                        end of the Season.
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
     <script>
 
         const endpointUrl = "../back-end/api.cfm/doses";
@@ -323,6 +326,14 @@
                     },
 
                     plugins: {
+                        legend: {
+                            onHover: (event, chartElement) => {
+                                event.native.target.style.cursor = 'pointer'
+                            },
+                            onLeave: (event, chartElement) => {
+                                event.native.target.style.cursor = 'default'
+                            }
+                        },
                         tooltip: {
                             callbacks: { // hovering over specific data point on line graph
                                 // We're adding more info for the user. 
@@ -373,21 +384,25 @@
         const lineGraph = document.getElementById("lineGraph");
         const barGraph = document.getElementById("barGraph");
         const scatterGraph = document.getElementById("scatterGraph");
-        lineGraph.addEventListener("click", function () {
+        const chartType = document.getElementById("chartType");
+        chartType.textContent = "Line";
 
+        lineGraph.addEventListener("click", function () {
+            chartType.textContent = "Line";
             renderChart('line');
 
         });
         barGraph.addEventListener("click", function () {
+            chartType.textContent = "Bar";
 
             renderChart('bar');
 
         });
-        scatterGraph.addEventListener("click", function () {
+        // scatterGraph.addEventListener("click", function () {
 
-            renderChart('scatter');
+        //     renderChart('scatter');
 
-        });
+        // });
 
 
 
