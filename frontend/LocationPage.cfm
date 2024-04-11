@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Locations</title>
     <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous">
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <style>
         #map-container {
@@ -23,6 +24,7 @@
             width: 95%;
             border-radius: 20px;
         }
+        
 
         #TitlePage {
             font-weight: bold;
@@ -31,9 +33,12 @@
             margin-top: 50px;
         }
 
+
         .container-fluid {
             text-align: center;
         }
+        
+        
 
         #provider-list {
             border-left: 1px solid black;
@@ -51,7 +56,16 @@
         }
 
         .col-sm-6 button:hover {
-            background-color: gray;
+            background-color: blue;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #provider-list {
+        max-height: 400px; 
+        overflow-y: auto; 
         }
     </style>
 </head>
@@ -67,13 +81,12 @@
             <h2>Search for Providers</h2>
             <form>
                 <div class="form-group">
-                    <label for="name">Location</label>
                     <input type="text" class="form-control" id="location" placeholder="Enter your Zipcode">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
-        <div class="col-md-6" id="provider-list">
+        <div class="col-md-6 hidden" id="provider-list">
             <h2>Providers</h2>
             <ul class="list-group" id="providers"></ul>
         </div>
@@ -105,12 +118,14 @@
             console.error('Error loading navigation bar:', error);
         });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous">
+</script>
 <script>
   (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "{YOUR_API_KEY}",
+    key: "Your_API_Key",
     v: "weekly",
   });
 </script>

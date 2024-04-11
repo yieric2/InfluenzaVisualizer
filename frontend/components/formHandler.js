@@ -1,20 +1,22 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
-const APIKEY = '{YOUR_API_KEY}';
-let providerLocationArr = [];
+const APIKEY = 'YOUR_API_KEY';
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form');
+  const providerListElement = document.getElementById('provider-list');
+  const addressInput = document.getElementById('location');
+  const providers = document.getElementById('providers');
   form.addEventListener('submit', function(event) {
     event.preventDefault(); 
-    const addressInput = document.getElementById('location');
-    const providerListElement = document.getElementById('providers'); 
-    providerListElement.innerHTML = ''; 
-    const address = addressInput.value.trim(); 
+    const address = addressInput.value.trim();
+    let providerLocationArr = [];
+    providerListElement.classList.add('hidden');
     addressInput.value = '';
     if (address) { 
       console.log('Entered Address:', address);
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${APIKEY}`)
         .then(response => {
           if (!response.ok) {
+            providerListElement.innerHTML = '<li class="list-group-item">Geocoding request failed.<br>Try Providing a more precise location.</li>';
             throw new Error('Geocoding request failed');
           }
           return response.text(); 
@@ -50,43 +52,25 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
           console.log('Nearby Locations:', data);
           data.DATA.forEach((loc) =>{
-            const latitude = loc[0];
-            const longitude = loc[1];
-            const walkinsAccepted = loc[2];
-            const insuranceAccepted = loc[3];
-            const zip = loc[4];
-            const city = loc[5];
-            const state = loc[6];
-            const streetAddr = loc[7];
-            const phoneNumber = loc[8];
-            const webAddr = loc[9];
-            const MonHrs = loc[10];
-            const TueHrs = loc[11];
-            const WedHrs = loc[12];
-            const ThurHrs = loc[13];
-            const FriHrs = loc[14];
-            const SatHrs = loc[15];
-            const SunHrs = loc[16];
-            const distance = loc[17];
             providerLocationArr.push(new ProviderLocationModel({
-              longitude : longitude,
-              latitude : latitude,
-              walkinsAccepted : walkinsAccepted,
-              insuranceAccepted : insuranceAccepted,
-              locAdminZip : zip,
-              locAdminCity : city,
-              locAdminState : state,
-              locAdminStreet1 : streetAddr,
-              locPhone : phoneNumber,
-              webAddress : webAddr,
-              mondayHours : MonHrs,
-              tuesdayHours : TueHrs,
-              wednesdayHours : WedHrs,
-              thursdayHours : ThurHrs,
-              fridayHours : FriHrs,
-              saturdayHours : SatHrs,
-              sundayHours : SunHrs,
-              distance : distance
+              longitude : loc[0],
+              latitude : loc[1],
+              walkinsAccepted : loc[2],
+              insuranceAccepted : loc[3],
+              locAdminZip : loc[4],
+              locAdminCity : loc[5],
+              locAdminState : loc[6],
+              locAdminStreet1 : loc[7],
+              locPhone :  loc[8],
+              webAddress : loc[9],
+              mondayHours : loc[10],
+              tuesdayHours : loc[11],
+              wednesdayHours : loc[12],
+              thursdayHours : loc[13],
+              fridayHours :  loc[14],
+              saturdayHours : loc[15],
+              sundayHours : loc[16],
+              distance : loc[17]
             }));
           })
           populateProviderList();
@@ -97,27 +81,23 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       console.error('Invalid Address');
     }
-
     function populateProviderList() {
-      console.log("Content",providerListElement.innerHTML)
-      console.log("Content: a",a.innerHTML)
-      providerLocationArr.forEach(providerLocation => {
-        const a = document.createElement('a');
-        a.href = '#';
-        a.classList.add('list-group-item', 'list-group-item-action', 'flex-column', 'align-items-start');
-        a.innerHTML = `
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">${providerLocation.getFullAddress()}</h5>
-            <small>${providerLocation.distance} km</small>
-          </div>
-          <p class="mb-1">Phone: ${providerLocation.locPhone}</p>
-          <p class="mb-1">Web: ${providerLocation.webAddress}</p>
-          <p class="mb-1">Hours: ${providerLocation.WeekHours()}</p>
-          <small>Walk-ins: ${providerLocation.acceptsWalkIns()} Insurance: ${providerLocation.acceptsInsurance()}</small>
-        `;
-        providerListElement.appendChild(a); 
-      });
-    }    
+      providers.innerHTML = '';
+      if (providerLocationArr.length === 0) {
+        providers.innerHTML = '<li class="list-group-item">No nearby locations found. 🥲</li>';
+      } else {
+        providerLocationArr.forEach(providerLocation => {
+          const a = document.createElement('a');
+          a.href = '#';
+          a.classList.add('list-group-item', 'list-group-item-action', 'flex-column', 'align-items-start');
+          a.innerHTML = providerLocation.displayInfo(); 
+          providers.appendChild(a);
+        });
+      }
+    
+      providerListElement.classList.remove('hidden'); 
+    }
+        
   }
   
   );

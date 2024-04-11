@@ -57,7 +57,11 @@ export default class ProviderLocation {
         return degrees * Math.PI / 180;
     }
     
-    WeekHours() {
+    WeekHours_A() {
+        return "M: " + this.mondayHours + " T: " + this.tuesdayHours +  " W: " + this.wednesdayHours + " Th: " + this.thursdayHours +  " F: " + this.fridayHours + " Sat: " + this.saturdayHours + " Sun: " + this.sundayHours;
+    }
+
+    WeekHours_B() {
         return "Monday: " + this.mondayHours + "<br>" + "Tuesday: " + this.tuesdayHours + "<br>" + "Wednesday: " + this.wednesdayHours + "<br>" + "Thursday: " + this.thursdayHours + "<br>" + "Friday: " + this.fridayHours + "<br>" + "Saturday: " + this.saturdayHours + "<br>" + "Sunday: " + this.sundayHours;
     }
 
@@ -122,5 +126,24 @@ export default class ProviderLocation {
     getWebsite() {
         return this.webAddress;
     }
+
+    getDistanceInMiles() {
+        return Math.round((this.distance / 1.609344) * 100) / 100;
+    }
+
+displayInfo() {
+    return `
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">${this.getFullAddress()}</h5>
+      <small>${this.getDistanceInMiles()} mi</small>
+    </div>
+    <p class="mb-1">Phone: ${this.getPhoneNumber()}</p>
+    <p class="mb-1">Web: <a href="${this.getWebsite()}/">${this.getWebsite()}</a></p>
+    <p class="mb-1">Hours: ${this.WeekHours_A()}</p>
+    <small>Walk-ins: ${this.acceptsWalkIns() ? 'Yes' : 'No'} Insurance: ${this.acceptsInsurance() ? 'Yes' : 'No'}</small>
+  `;
+}
+
+
     
 }
