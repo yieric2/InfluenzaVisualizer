@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="doses.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -38,14 +40,14 @@
     </script>
 
     <div class="container mt-4">
-        <h1 class="text-center">Cumulative Doses in Millions</h1>
+        <h2 class="text-center mb-3">Cumulative Doses in Millions</h2>
 
-        <div class="row justify-content-center mb-1">
+        <div class="row justify-content-center mb-3">
 
 
             <div class="dropdown mr-2" id="start">
                 From:
-                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Week 1
                 </button>
@@ -54,7 +56,7 @@
             </div>
             <div class="dropdown mr-2" id="end">
                 To:
-                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                     Week 31
                 </button>
@@ -66,7 +68,7 @@
             </div>
             <div class="dropdown ml-2" id="start">
                 Chart Type:
-                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="chartType"
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="chartType"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Chart Type
                 </button>
@@ -93,15 +95,15 @@
                     <span id="dosesHigh" style="font-weight: bold;"></span> millions doses distributed
                     at
                     the end of the
-                    Season.
+                    season.
                     On the other hand, the <span id="seasonLow" style=" font-weight: bold;"></span>
-                    Season
+                    season
                     had the lowest amount
                     of doses
                     distributed with
                     <span id="dosesLow" style="font-weight: bold;"></span> millions doses distributed at
                     the
-                    end of the Season.
+                    end of the season.
                 </div>
             </div>
         </div>
