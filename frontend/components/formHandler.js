@@ -6,7 +6,7 @@ import ProviderLocationModel from './ProviderLocationModel.js';
  * @Constants and @global variables
  *
  */
-const APIKEY = 'AIzaSyB3BLIavj4RdlAB92JmXQfJMJiJ9BAGJ4k';
+const APIKEY = '{APIKEY}';
 let providerLocationArr = [];
 const form = document.querySelector('form');
 const providerListElement = document.getElementById('provider-list');
