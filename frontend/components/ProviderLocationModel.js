@@ -23,11 +23,11 @@ export default class ProviderLocation {
         this.latitude = latitude;
         this.walkinsAccepted = walkinsAccepted;
         this.insuranceAccepted = insuranceAccepted;
-        this.locAdminZip = locAdminZip;
-        this.locAdminCity = locAdminCity;
-        this.locAdminState = locAdminState;
-        this.locAdminStreet1 = locAdminStreet1;
-        this.locPhone = locPhone;
+        this.locAdminZip = this.cleanString(locAdminZip);
+        this.locAdminCity = this.cleanString(locAdminCity);
+        this.locAdminState = this.cleanString(locAdminState);
+        this.locAdminStreet1 = this.cleanString(locAdminStreet1);
+        this.locPhone = this.formatPhoneNumber(locPhone);
         this.webAddress = webAddress;
         this.mondayHours = mondayHours;
         this.tuesdayHours = tuesdayHours;
@@ -38,6 +38,15 @@ export default class ProviderLocation {
         this.sundayHours = sundayHours;
         this.distance = distance;
     }
+
+    cleanString(input) {
+        return input.replace(/[^\x20-\x7E]/g, '');
+    }
+    formatPhoneNumber(input) {
+        let stringInput = input.toString().split('.')[0];  
+        return stringInput.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+    
 
     calculateDistance(fromLat, fromLng) {
         const earthRadiusKm = 6371;
@@ -131,19 +140,35 @@ export default class ProviderLocation {
         return Math.round((this.distance / 1.609344) * 100) / 100;
     }
 
-displayInfo() {
-    return `
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">${this.getFullAddress()}</h5>
-      <small>${this.getDistanceInMiles()} mi</small>
-    </div>
-    <p class="mb-1">Phone: ${this.getPhoneNumber()}</p>
-    <p class="mb-1">Web: <a href="${this.getWebsite()}/">${this.getWebsite()}</a></p>
-    <p class="mb-1">Hours: ${this.WeekHours_A()}</p>
-    <small>Walk-ins: ${this.acceptsWalkIns() ? 'Yes' : 'No'} Insurance: ${this.acceptsInsurance() ? 'Yes' : 'No'}</small>
-  `;
-}
+    displayInfo() {
+        return `
+        <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">${this.getFullAddress()}</h5>
+        <small> approx. ${this.getDistanceInMiles()} mi</small>
+        </div>
+        <p class="mb-1">Phone: ${this.getPhoneNumber()}</p>
+        <p class="mb-1">Web: <a href="${this.getWebsite()}/">${this.getWebsite()}</a></p>
+        <p class="mb-1">Hours: ${this.WeekHours_A()}</p>
+        <small>Walk-ins: ${this.acceptsWalkIns() ? 'Yes' : 'No'} Insurance: ${this.acceptsInsurance() ? 'Yes' : 'No'}</small>
+    `;
+    }
 
+    displayInfo_B() {
+        return `
+        <div class="d-flex w-100 justify-content-between">
+          <div class="flex-grow-1" style="">
+            <h7 class="mb-1"><b>${this.getFullAddress()}</b></h7>
+          </div>
+          <div>
+            <small><b>approx. ${this.getDistanceInMiles()} mi</b></small>
+            <p class="mb-1"><b>Phone: ${this.getPhoneNumber()}</b></p>
+            <p class="mb-1"><b>Web: <a href="${this.getWebsite()}">${this.getWebsite()}</a></b></p>
+            <p class="mb-1"><b>Hours: ${this.WeekHours_A()}</b></p>
+            <small><b>Walk-ins: ${this.acceptsWalkIns() ? 'Yes' : 'No'} Insurance: ${this.acceptsInsurance() ? 'Yes' : 'No'}</b></small>
+          </div>
+        </div>
+          `;
+    }
 
     
 }

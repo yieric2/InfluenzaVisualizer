@@ -27,24 +27,22 @@
         
 
         #TitlePage {
-            font-weight: bold;
+            font-family: Roboto;
             font-size: 20px;
-            margin-left: 400px;
             margin-top: 50px;
         }
 
 
-        .container-fluid {
+        .container-lg {
             text-align: center;
+            font-family: Roboto;
+            height: 100vh;
+            width: 100vw;
         }
         
-        
 
-        #provider-list {
-            border-left: 1px solid black;
-        }
 
-        .col-sm-6 button {
+        .search-container button {
             background-color: black;
             border-radius: 20px;
             color: white;
@@ -53,44 +51,116 @@
             border: none;
             cursor: pointer;
             margin-top: 10px;
+            margin-bottom: 50px;
+            font-family: Roboto;
+
         }
 
-        .col-sm-6 button:hover {
-            background-color: blue;
+        .search-container button:hover {
+            background-color: #0d6efd;
         }
 
         .hidden {
             display: none;
         }
 
+        .dropdown-center {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            width: 50%; 
+        }
+
         #provider-list {
-        max-height: 400px; 
+        max-height: 300px; 
         overflow-y: auto; 
         }
+        #dropdownCustom {
+            margin-bottom: 20px;
+        }
+
+        
+        .dropdown-item {
+            text-align: center;
+            width: 100%;
+            padding: 10px 80px;
+            background-color: #f1f1f1
+        }
+
+        
+        .dropdown-item:hover, .dropdown-item:focus {
+            color: #ffffff; 
+            background-color: #007bff; 
+            text-decoration: none; 
+        }
+        
+        .dropdown-item.active, .dropdown-item:active {
+            color: #fff;
+            background-color: #0056b3; 
+            outline: none;
+        }
+
+        
+        .dropdown-item.disabled, .dropdown-item:disabled {
+            color: #6c757d; 
+            background-color: transparent;
+            pointer-events: none; 
+        }
+
+        #queryResult {
+            margin-bottom: 50px;
+        }
+
     </style>
 </head>
 <body>
 <header id="navbar"></header>
+<div id="top-half-page" style="text-align:center;">
 <p id="TitlePage">Flu Vaccination Provider Locations</p>
 <div id="map-container">
     <div id="map"></div>
 </div>
-<div class="container-fluid border">
+</div>
+<div id="bottom-half-page">
+<div class="container-lg border">
     <div class="row">
-        <div class="col-sm-6">
-            <h2>Search for Providers</h2>
+        <div class="search-container">
+            <h2>Search for Nearest Providers (US Only)</h2>
             <form>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="location" placeholder="Enter your Zipcode">
+                    <input type="text" class="form-control" id="location" placeholder="Enter your city, address, and/or zipcode">
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
+                <div class="dropdown-center">
+                <button id="dropdownCustom" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Desired radius (miles)
+                </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">5</a></li>
+                        <li><a class="dropdown-item" href="#">10</a></li>
+                        <li><a class="dropdown-item" href="#">15</a></li>
+                        <li><a class="dropdown-item" href="#">20</a></li>
+                    </ul>
+                </div>
+                <button type="submit" id="search-btn"class="btn btn-primary hidden">Search</button>
             </form>
         </div>
-        <div class="col-md-6 hidden" id="provider-list">
-            <h2>Providers</h2>
+        <div id="queryResult"></div>
+    </div>
+    <div class="row">
+        <div class="hidden" id="provider-list">
+            <h2>Nearby Provider Locations</h2>
             <ul class="list-group" id="providers"></ul>
         </div>
     </div>
+</div>
 </div>
 <script type="module" src="./components/formHandler.js"></script>
 <script>
@@ -125,7 +195,7 @@
 </script>
 <script>
   (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "Your_API_Key",
+    key: "AIzaSyB3BLIavj4RdlAB92JmXQfJMJiJ9BAGJ4k",
     v: "weekly",
   });
 </script>

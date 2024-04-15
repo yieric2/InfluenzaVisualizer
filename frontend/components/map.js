@@ -1,8 +1,8 @@
 let map = null;
 const markers = [];
 
-export async function initMap() {
-  const position = { lat: 40.098432, lng: -100.189222 };
+async function initMap() {
+  const position = { lat: 37.098432, lng: -91.189222 };
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   map = new Map(
