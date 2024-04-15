@@ -4,7 +4,7 @@
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="doses.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,7 +18,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="stylesheet" href="doses.css">
     <title>Influenza's vaccine doses in millions</title>
 </head>
 
@@ -39,13 +39,13 @@
 
     </script>
 
-    <div class="container mt-4">
+    <div class="container mt-3">
         <h2 class="text-center mb-3">Cumulative Doses in Millions</h2>
 
         <div class="d-flex justify-content-center mb-3">
 
 
-            <div class="dropdown mr-2" id="start">
+            <div class="dropdown" id="start">
                 From:
                 <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,7 +54,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonStart" id="startWeekDropdown">
                 </div>
             </div>
-            <div class="dropdown mr-2" id="end">
+            <div class="dropdown" id="end">
                 To:
                 <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
@@ -66,7 +66,7 @@
 
 
             </div>
-            <div class="dropdown ml-2" id="start">
+            <div class="dropdown" id="start">
                 Chart Type:
                 <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="chartType"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
