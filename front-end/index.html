@@ -164,6 +164,10 @@
             }
             //  console.log(type);
             const ctx = document.getElementById('myChart');
+            if (window.innerWidth <= 768) { // Check if the screen width is less than or equal to 768px (typical breakpoint for tablets and mobiles)
+                ctx.height = window.innerHeight * 0.20; // Set chart height to 20vh 
+            }
+
             var influenza = { // this dataset is used to graph multiple lines
                 labels: [],
                 datasets: [],
@@ -202,6 +206,8 @@
                 data: influenza,
 
                 options: {
+
+
                     scales: {
 
 
