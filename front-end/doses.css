@@ -60,7 +60,11 @@ nav a {
 
 }
 
-
+.dropdown#start,
+.dropdown#end,
+.dropdown#chartType {
+    margin-right: 1vw;
+}
 
 
 .dropdown-menu {
