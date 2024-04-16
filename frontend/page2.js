@@ -8,33 +8,33 @@ const initialData = {
     datasets: [{
         label: 'White',
         data: [39.6, 41.4, 42.2, 42.3, 43.4, 0, 0, 1.4, 8.8, 28, 34.7, 37],
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius : 5
         },{
         label: 'Hispanic',
         data: [39.6, 42.6, 42.6, 44, 44, 0, 0, 0, 13, 30.4, 35.9, 39.4],
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius : 5
         },
         {
         label: '18-49 Years at High Risk',
         data: [24.8, 28.4, 28.4, 28.4, 28.4, 0, 0, 0, 0, 12.9, 17.1, 21.],
-        borderWidth: 1,
-        borderRadius : 5
+        borderWidth: 2,
+        borderRadius : 5,
         }]
 };
 
-const plugin = {
-id: 'customCanvasBackgroundColor',
-beforeDraw: (chart, args, options) => {
-    const {ctx} = chart;
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-over';
-    ctx.fillStyle = options.color || '#99ffff';
-    ctx.fillRect(0, 0, chart.width, chart.height);
-    ctx.restore();
+let initialFontSize;
+
+if (window.innerWidth >= 992){
+    initialFontSize = 16;
 }
-};
+else if (window.innerWidth < 992 && window.innerWidth >= 576){
+    initialFontSize = 12;
+}
+else {
+    initialFontSize = 9;
+}
 
 // Create chart
 var ctx = document.getElementById('myChart').getContext('2d');
@@ -52,23 +52,38 @@ var myChart = new Chart(ctx, {
                 display: true,
                 text: 'Seasonal Influenza Coverage For Alabama : 2022 - 2023',
                 font : {
-                    size : 18
+                    size : initialFontSize + 2
+                }
+            },
+            legend: {
+                onHover : (event, chartElement) => {
+                    event.native.target.style.cursor = 'pointer'
+                },
+                onLeave : (event, chartElement) => {
+                    event.native.target.style.cursor = 'default'
                 }
             }
         },
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks : {
+                    font : {
+                        size : initialFontSize
+                    }
+                }
             },
             x: {
                 ticks : {
                     maxRotation : 45,
-                    minRotation : 45
+                    minRotation : 45,
+                    font : {
+                        size : initialFontSize
+                    }
                 }
             },
         },
-    },
-    plugins: [plugin]
+    }
 });
 
 const updateGeography = async () => {
@@ -176,7 +191,7 @@ const getCoverage = async() => {
 
         // If no data then do not update
         if(rowData.length === 0){
-            alertTrigger("Sorry No Data Available", "danger");
+            alertTrigger("Sorry, No Data Available For The Selected Demographic", "danger");
             throw new Error("Sorry No Data");
         }
 
@@ -193,7 +208,7 @@ const getCoverage = async() => {
         const dataset = {
             label: dimension,
             data: [],
-            borderWidth: 1,
+            borderWidth: 2,
             borderRadius : 5
         };
 
@@ -279,5 +294,4 @@ const checkLimit = () => {
             }
         }
     }
-    
 }

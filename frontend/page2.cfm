@@ -9,11 +9,8 @@
   https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js
   "></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="background-color: rgb(241, 249, 255)">
     <cfquery datasource="MySQL_test" name="getAllGeography">
         use influenza_database
     </cfquery>
@@ -30,22 +27,24 @@
                 console.error('Error loading navigation bar:', error);
             });
     </script>
-    <div class="container mt-3 d-flex flex-column" style='height: calc(100% - 150px); font-family: "Roboto", sans-serif;'>
-        <h2>Demographics for Influenza Vaccination Coverage</h2>
-        <p>On this webpage, we present CDC-sourced data illustrating Influenza vaccination coverage across various demographics, visualized through a multiple bar graph. You can customize the display by clicking on the graph settings button. <strong>Note</strong>, options like <strong>"Any influenza vaccination Seasonal or H1N1"</strong> and <strong>"Influenza A (H1N1) 2009 Monovalent"</strong> apply solely to the <strong>2009 - 2010 season</strong>. Also, there's a limit of <strong>five selections</strong> for age groups and race/ethnicity. This data offers insights into vaccination trends, aiding efforts to improve strategies, promote equity, and lessen influenza's public health impact.</p>
+    <div class="container mt-3 d-flex flex-column">
+        <h2 style="letter-spacing: 0.10rem;">Demographics for Influenza Vaccination Coverage</h2>
+        <p style="letter-spacing: 0.05rem; color: rgba(0,0,0,0.8);">On this webpage, we present CDC-sourced data illustrating Influenza vaccination coverage across various demographics, visualized through a multiple bar graph. You can customize the display by clicking on the graph settings button. <strong>Note</strong>, options like <strong>"Any influenza vaccination Seasonal or H1N1"</strong> and <strong>"Influenza A (H1N1) 2009 Monovalent"</strong> apply solely to the <strong>2009 - 2010 season</strong>. Also, there's a limit of <strong>five selections</strong> for age groups and race/ethnicity. This data offers insights into vaccination trends, aiding efforts to improve strategies, promote equity, and lessen influenza's public health impact.</p>
         <!-- Button trigger modal -->
         <cfoutput >
-                <button type="button" class="btn btn-primary d-block my-1 w-25" data-bs-toggle="modal" data-bs-target="##coverageModal">
-                    Graph Setting
-                </button>    
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary d-block shadow" data-bs-toggle="modal" data-bs-target="##coverageModal">
+                        Graph Setting
+                    </button>  
+                </div>  
         </cfoutput>
-        <div class="flex-grow-1">
-            <canvas id="myChart"></canvas>
-        </div>
+    </div>
+    <div class="container" style="height: 70vh;">
+        <canvas id="myChart"></canvas>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="coverageModal" tabindex="-1" aria-labelledby="coverageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
         <div class="modal-header">
             <h1 class="modal-title fs-5" id="coverageModalLabel">Graph Setting</h1>
@@ -55,7 +54,7 @@
             <div class="coverage_form_container">
             <div id="liveAlertPlaceholder"></div>
             <form id="coverage_form">
-                <label class="text-uppercase my-2">Vaccine Type</label>
+                <label class="text-uppercase mb-2">Vaccine Type</label>
                 <cfquery datasource="MySQL_test" name="getAllVaccineType">
                     SELECT * 
                     FROM VaccineType
@@ -106,6 +105,7 @@
                     WHERE DimensionTypeID = 1
                     ORDER BY Name    
                 </cfquery>
+                <p class="mt-3" style="color: rgba(0,0,0,0.8);"><strong>Selection Limit: 5 Total (Across Age & Race/Ethnic Groups)</strong></p>
                 <div>
                     <label class="d-block text-uppercase my-3">Age Group</label>
                     <div class="mb-1" style="border: rgba(0,0,0,0.1) solid 1px;"></div>
