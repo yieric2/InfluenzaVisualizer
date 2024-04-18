@@ -155,7 +155,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <input type="button" class="btn btn-primary" onclick="getCoverage()" value="Apply"/>
+            <input id="applyBtn"  type="button" class="btn btn-primary" onclick="getCoverage()" value="Apply"/>
         </div>
         </div>
     </div>

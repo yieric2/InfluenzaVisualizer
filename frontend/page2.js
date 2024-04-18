@@ -134,10 +134,17 @@ const alertTrigger = (message, type) => {
     ].join('')
 
     alertPlaceholder.append(wrapper);
+
+    alertPlaceholder.scrollIntoView({behavior : 'smooth'});
 }
 
 const getCoverage = async() => {
     try{
+        //disable apply button
+        applyButton = document.getElementById('applyBtn');
+
+        applyButton.disabled = true;
+
         // Build body for coldfusion call
         const body = {
             influenza_type : null,
@@ -266,6 +273,12 @@ const getCoverage = async() => {
     }
     catch(error){
         console.error("Error fetching data", error)
+    }
+    finally {
+        //enable the apply button
+        applyButton = document.getElementById('applyBtn');
+
+        applyButton.disabled = false;
     }
 }
 
