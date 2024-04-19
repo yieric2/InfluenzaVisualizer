@@ -71,3 +71,9 @@ nav a {
     max-height: 280px;
     overflow-y: auto;
 }
+
+.legend-title {
+    font-size: 18px;
+    /* Set the desired font size for the title */
+    /* You can add other styling properties here if needed */
+}

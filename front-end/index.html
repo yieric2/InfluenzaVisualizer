@@ -73,7 +73,7 @@
                     Chart Type
                 </button>
                 <div class="dropdown-menu" aria-labelledby="chartType" id="graphFilter">
-                    <a class="dropdown-item" href="#" id="lineGraph">Line (default)</a>
+                    <a class="dropdown-item" href="#" id="lineGraph">Line</a>
 
                     <a class="dropdown-item" href="#" id="barGraph">Bar</a>
                     <a class="dropdown-item" href="#" id="scatterGraph" style="display: none;">Scatter</a>
@@ -165,9 +165,8 @@
             //  console.log(type);
             const ctx = document.getElementById('myChart');
             if (window.innerWidth <= 768) { // Check if the screen width is less than or equal to 768px (typical breakpoint for tablets and mobiles)
-                ctx.height = window.innerHeight * 0.20; // Set chart height to 20vh 
+                ctx.height = window.innerHeight * 0.6; // Set chart height to 20vh 
             }
-
             var influenza = { // this dataset is used to graph multiple lines
                 labels: [],
                 datasets: [],
@@ -215,27 +214,44 @@
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Season Week'
-                            }
+                                text: 'Season Week',
+                                font: {
+                                    size: 16, // Set the font size for the y-axis title
+                                }
+                            },
+
                         },
                         y: {
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Cumulative Doses (Millions)'
-                            }
+                                text: 'Cumulative Doses (Millions)',
+                                font: {
+                                    size: 16, // Set the font size for the y-axis title
+                                }
+                            },
+
                         },
 
                     },
 
                     plugins: {
                         legend: {
+                            title: {
+                                display: true,
+                                text: 'Season',
+                                font: {
+                                    size: 16, // Set the font size for the x-axis title
+                                }
+                            },
                             onHover: (event, chartElement) => {
                                 event.native.target.style.cursor = 'pointer'
                             },
                             onLeave: (event, chartElement) => {
                                 event.native.target.style.cursor = 'default'
                             }
+                            ,
+
                         },
                         tooltip: {
                             callbacks: { // hovering over specific data point on line graph
