@@ -1,12 +1,11 @@
 import ProviderLocationModel from './ProviderLocationModel.js';
-// import { map } from './map.js';
-
+import { initMap } from './map.js';
 
 /** 
  * @Constants and @global variables
  *
  */
-const APIKEY = '{APIKEY}';
+const APIKEY = '{API_KEY}';
 let providerLocationArr = [];
 const form = document.querySelector('form');
 const providerListElement = document.getElementById('provider-list');
@@ -14,9 +13,12 @@ const addressInput = document.getElementById('location');
 const providers = document.getElementById('providers');
 const queryResult = document.getElementById('queryResult');
 const searchButton = document.getElementById('search-btn');
+let markers = [];
 let selectedMiles = ''
 let address = ''
-
+let new_map = null;
+let new_position = { lat: 41.098432, lng: -99.189222 };
+let selectLocation = null;
 
 // Main function to handle form submission
 document.addEventListener('DOMContentLoaded', function() {
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   });
 });
+
 
 // Dropdown menu handler for selecting range of miles
 function setupDropdownHandlers() {
@@ -49,6 +52,10 @@ function updateFormState() {
   if (!address) {
     selectedMiles = '';
     providerListElement.classList.add('hidden');
+    if(new_map){
+      initMap();
+      new_map = null;
+    }
   }
   updateQueryResult();
 }
@@ -101,7 +108,7 @@ async function geocodeAddressandPopulate(address) {
     const location = await handleGeocodeResponse(response);
     const nearbyLocations = await fetchNearbyLocations(location);
     const providerData = await handleNearbyLocationsResponse(nearbyLocations);
-    console.log("Reached")
+    updateMap();
     populateProviderList();
   } catch (error) {
     handleError(error);
@@ -148,6 +155,8 @@ function handleGeocodeResponse(response) {
 function fetchNearbyLocations(location) {
   const { lat, lng } = location;
   validateRange(lat,lng);
+  new_position.lat = lat;
+  new_position.lng = lng;
   const nearbyLocationsUrl = `/Application/api/nearByLocations.cfm?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&miles=${encodeURIComponent(selectedMiles)}`;
   console.log('Nearby Locations URL:', nearbyLocationsUrl)
   return fetch(nearbyLocationsUrl)
@@ -189,23 +198,44 @@ function handleError(error) {
 }
 // Populate provider list dom element with provider locations data
 function populateProviderList() {
-  providerListElement.innerHTML = '<h2 style="font-family: Roboto;">Nearby Provider Locations</h2>';
-  console.log(providerLocationArr.length)
   providers.innerHTML = '';
+  providerListElement.classList.remove('hidden');
+  providerListElement.innerHTML = '<h2 style="font-family: Roboto;">Nearby Provider Locations</h2>';
+  providerListElement.scrollTop = 0;
   if (providerLocationArr.length === 0) {
     providerListElement.innerHTML = '<li class="list-group-item">No nearby locations found.🧐</li>';
   } else {
     providerLocationArr.forEach(providerLocation => {
+
+      // Can be extracted and implemented standalone to improve readability but found this to be less computationally expensive.
+      // Alternative would have me use 2 identical loops
+      markers.push(create_marker({
+        coords: {lat: providerLocation.latitude, lng: providerLocation.longitude},
+        city: providerLocation.locAdminCity,
+        number: providerLocation.locPhone
+      }));
       const a = document.createElement('a');
       a.href = '#';
       a.classList.add('list-group-item', 'list-group-item-action', 'flex-column', 'align-items-start');
       a.style = 'border: 5px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; font-family: Roboto;';
       a.innerHTML = providerLocation.displayInfo(); 
+      a.addEventListener('click', async() => {
+        new_map.panTo({lat: providerLocation.latitude, lng: providerLocation.longitude});
+        new_map.setZoom(15);
+        if(selectLocation){
+          selectLocation.setMap(null);
+        }
+        selectLocation = await create_marker({
+          coords: {lat: providerLocation.latitude, lng: providerLocation.longitude}, 
+          city: providerLocation.locAdminCity,
+          number: providerLocation.locPhone
+        },
+          '#67f062')
+      });
       providers.appendChild(a);
     });
     providerListElement.appendChild(providers);
   }
-  providerListElement.classList.remove('hidden'); 
 }
 
 
@@ -220,4 +250,79 @@ function validateRange(lat, long) {
     providerListElement.classList.remove('hidden');
     throw new Error('Location out of bounds');
   }
+}
+
+async function updateMap(){
+  try {
+    const { Map } = await google.maps.importLibrary("maps");
+    new_map = new Map(document.getElementById("map"), 
+    {
+      center: new_position,
+      mapId: 'GmapID',
+      zoom: 10,
+      scaleControl: true,
+      rotateControl: true,
+      mapTypeControl: false,
+      fullscreenControl: false,
+      streetViewControl: false,
+      zoomControl: true,
+      rotateControlOptions: {
+        position: google.maps.ControlPosition.LEFT_CENTER
+      },
+      gestureHandling: "greedy"
+    });
+    create_user_marker({coords: new_position});
+    console.log('Markers:', markers.length)
+   // const markerCluster = new markerClusterer.MarkerClusterer({ markers: markers, map: new_map });
+  } catch (error) {
+    console.error('Error updating map:', error);
+  }
+}
+
+async function create_marker(provider, color='#ea4335') {
+  const { AdvancedMarkerElement,PinElement } = await google.maps.importLibrary("marker");
+  const pin = new PinElement({
+    background: color,
+  });
+  const marker = new AdvancedMarkerElement({
+    map: new_map,
+    position: provider.coords,
+    content: pin.element
+  }); 
+
+  const infoWindow = new google.maps.InfoWindow({
+    content: `<h5> ${provider.city} </h5>` + `<p><b>Store number: ${provider.number}</b></p>`
+  });
+  marker.addListener("click", () => {
+    infoWindow.open(new_map, marker);
+    setInterval (() => {
+      infoWindow.close(new_map, marker);
+    }
+    , 5000);
+  });
+  
+  return marker;
+}
+
+async function create_user_marker(location, color='blue') {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+  const pin = new PinElement({
+    background: color,
+  });
+
+  const marker = new AdvancedMarkerElement({
+    map: new_map,
+    position: location.coords,
+    content: pin.element
+  }); 
+  const infoWindow = new google.maps.InfoWindow({
+    content: `<h5> Your Location </h5>`
+  });
+  marker.addListener("click", () => {
+    infoWindow.open(new_map, marker);
+    setInterval (() => {
+      infoWindow.close(new_map, marker);
+    }
+    , 5000);
+  });
 }

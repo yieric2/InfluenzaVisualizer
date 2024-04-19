@@ -23,7 +23,7 @@ export default class ProviderLocation {
         this.latitude = latitude;
         this.walkinsAccepted = walkinsAccepted;
         this.insuranceAccepted = insuranceAccepted;
-        this.locAdminZip = this.cleanString(locAdminZip);
+        this.locAdminZip = this.padZipCode(locAdminZip);
         this.locAdminCity = this.cleanString(locAdminCity);
         this.locAdminState = this.cleanString(locAdminState);
         this.locAdminStreet1 = this.cleanString(locAdminStreet1);
@@ -39,6 +39,13 @@ export default class ProviderLocation {
         this.distance = distance;
     }
 
+    padZipCode(zipCode) {
+        if (zipCode.length === 4) {
+            return '0' + zipCode;
+        }
+        return zipCode;
+    }
+    
     cleanString(input) {
         return input.replace(/[^\x20-\x7E]/g, '');
     }

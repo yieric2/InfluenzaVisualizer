@@ -43,17 +43,12 @@
 
 
         .search-container button {
-            background-color: black;
             border-radius: 20px;
-            color: white;
             padding: 10px 80px;
             font-size: 16px;
-            border: none;
-            cursor: pointer;
             margin-top: 10px;
             margin-bottom: 50px;
             font-family: Roboto;
-
         }
 
         .search-container button:hover {
@@ -83,6 +78,7 @@
         max-height: 300px; 
         overflow-y: auto; 
         }
+
         #dropdownCustom {
             margin-bottom: 20px;
         }
@@ -98,7 +94,7 @@
         
         .dropdown-item:hover, .dropdown-item:focus {
             color: #ffffff; 
-            background-color: #007bff; 
+            background-color: #0d6efd; 
             text-decoration: none; 
         }
         
@@ -130,7 +126,7 @@
 </div>
 </div>
 <div id="bottom-half-page">
-<div class="container-lg border">
+<div class="container-lg">
     <div class="row">
         <div class="search-container">
             <h2>Search for Nearest Providers (US Only)</h2>
@@ -139,7 +135,7 @@
                     <input type="text" class="form-control" id="location" placeholder="Enter your city, address, and/or zipcode">
                 </div>
                 <div class="dropdown-center">
-                <button id="dropdownCustom" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button id="dropdownCustom" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Desired radius (miles)
                 </button>
                     <ul class="dropdown-menu">
@@ -156,13 +152,11 @@
     </div>
     <div class="row">
         <div class="hidden" id="provider-list">
-            <h2>Nearby Provider Locations</h2>
             <ul class="list-group" id="providers"></ul>
         </div>
     </div>
 </div>
 </div>
-<script type="module" src="./components/formHandler.js"></script>
 <script>
     fetch('navbar.html')
         .then(response => response.text())
@@ -200,6 +194,7 @@
   });
 </script>
 
-<script src="./components/map.js"></script>
+<script type="module" src="./components/map.js"></script>
+<script type="module" src="./components/formHandler.js"></script>
 </body>
 </html>

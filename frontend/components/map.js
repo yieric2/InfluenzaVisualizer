@@ -1,14 +1,46 @@
 let map = null;
-const markers = [];
+let markers = [];
+let position = { lat: 41.098432, lng: -99.189222 };
+let zoom = 4;
+const clustStyle = [
+  {
+    textColor: "white",
+    url: "/Application/App 2/frontend/components/images/BlueCircle.png",
+    height: 50,
+    width: 50,
+  },
+  {
+    textColor: "white",
+    url: "/Application/App 2/frontend/components/images/BlueCircle.png",
+    height: 50,
+    width: 50,
+  },
+  {
+    textColor: "white",
+    url: "/Application/App 2/frontend/components/images/RedCircle.png",
+    height: 50,
+    width: 50,
+  },
+]
+
+const mcOptions = {
+  styles: clustStyle,
+  maxZoom: 10,
+  gridSize: 50
+  // averageCenter: true,
+  // minimumClusterSize: 2,
+  // zoomOnClick: true,
+  // imagePath: "./images/m",
+  // imageExtension: "png",
+}
 
 async function initMap() {
-  const position = { lat: 37.098432, lng: -91.189222 };
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   map = new Map(
     document.getElementById('map'),
     {
-      zoom: 4,
+      zoom: zoom,
       center: position,
       mapId: 'GmapID',
       mapTypeControl: false,
@@ -27,13 +59,18 @@ async function initMap() {
     }
   );
 
+  function formatPhoneNumber(input) {
+    let stringInput = input.toString().split('.')[0];  
+    return stringInput.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    };
+
   function create_marker(provider) {
     const marker = new AdvancedMarkerElement({
       map: map,
       position: provider.coords
     });
     const infoWindow = new google.maps.InfoWindow({
-      content: `<h5> ${provider.city} </h5>` + `<p><b>Store number: ${provider.number}</b></p>`
+      content: `<h5> ${provider.city} </h5>` + `<p><b>Store number: ${formatPhoneNumber(provider.number)}</b></p>`
     });
     marker.addListener("click", () => {
       infoWindow.open(map, marker);
@@ -62,7 +99,23 @@ async function initMap() {
         const number = item[numberIndex] 
         create_marker({ coords: { lat: latitude, lng: longitude }, city: city, number: number});
       });
-      const markerCluster = new markerClusterer.MarkerClusterer({ markers, map });
+      const markerCluster = new markerClusterer.MarkerClusterer({ markers, map,renderer: {
+        render : ({markers, _position: position}) => {
+          return new google.maps.Marker({
+            position,
+            icon: {
+              url: "/Application/App 2/frontend/components/images/Perfected_BlueCircle.png",
+              scaledSize: new google.maps.Size(50, 50),
+            },
+            label: {
+              text: markers.length.toString(),
+              color: "white",
+              fontSize: "16px",
+            },
+
+          });
+        }
+      }});
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -70,3 +123,6 @@ async function initMap() {
 }
 
 initMap();
+
+
+export { initMap };
