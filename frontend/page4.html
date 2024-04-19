@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Rates</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -18,9 +19,9 @@
         crossorigin="anonymous"></script>
 
     <header id="navbar"></header>
-    <div class="text-container">
-        Flu Hospitalization Rates
-    </div>
+   <div class= "parentPage4">
+    <h2 class="topTitle"> Flu Hospitalization Rates </h2>
+
     <div class="controls-container">
         <div class="rate-option">
             <label for="options">Rate</label>
@@ -32,30 +33,53 @@
             </div>
         </div>
         <div class="year-option">
-            <label for="yearDropdown">Flu Season</label>
-            <select id="yearDropdown"></select>
+            <label class="form-label" for="yearDropdown">Flu Season</label>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="yearDropdownButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    2018 - 2019
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="yearDropdownButton" id="yearDropdown"></ul>
+            </div>
         </div>
+
         <div class="category-option">
-            <label for="categoryDropdown">Category</label>
-            <select id="categoryDropdown">
-                <option value="age">Age</option>
-                <option value="sex">Sex</option>
-                <option value="race">Race</option>
-                <option value="site">Site</option>
-            </select>
+            <label class="form-label" for="categoryDropdown">Category</label>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="categoryDropdownButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Age
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="categoryDropdownButton" id="categoryDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="age">Age</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="sex">Sex</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="race">Race</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="site">Site</a></li>
+                </ul>
+            </div>
         </div>
+
         <div class="option-option">
-            <label for="optionDropdown">Option</label>
-            <select id="optionDropdown"></select>
+            <label class="form-label" for="optionDropdown">Option</label>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="optionDropdownButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Option
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="optionDropdownButton" id="optionDropdown"></ul>
+            </div>
         </div>
+
+
     </div>
-    <div id="liveAlertPlaceholder"  ></div>
+    <div id="liveAlertPlaceholder"></div>
 
     <div class="aids">
         <div class="chart-container">
             <canvas id="lineChart"></canvas>
         </div>
     </div>
+   </div>
     <script>
         fetch('navbar.html')
             .then(response => response.text())
@@ -65,7 +89,7 @@
                 let activeLink = null;
                 if (currentPage.includes('page1.html')) {
                     activeLink = document.getElementById('page1-link');
-                } else if (currentPage.includes('page2.html')) {
+                } else if (currentPage.includes('page2.cfm')) {
                     activeLink = document.getElementById('page2-link');
                 } else if (currentPage.includes('page3.html')) {
                     activeLink = document.getElementById('page3-link');
@@ -76,23 +100,50 @@
                 if (activeLink) {
                     activeLink.classList.add('active');
                 }
+
+       		const navbarCollapse = document.querySelector('.navbar-collapse');
+        
+		navbarCollapse.addEventListener('show.bs.collapse', () => {
+  			document.body.style.overflow = 'hidden';
+		});
+
+		navbarCollapse.addEventListener('hidden.bs.collapse', () => {
+  			document.body.style.overflow = 'visible';
+		});
+
             })
             .catch(error => {
                 console.error('Error loading navigation bar:', error);
             });
+
     </script>
 
     <script>
+        document.getElementById('yearDropdown').addEventListener('click', function (event) {
+            if (event.target.classList.contains('dropdown-item')) {
+                var selectedYear = event.target.getAttribute('data-value');
+                document.getElementById('yearDropdownButton').textContent = selectedYear - 1 + " - " + selectedYear;
+            }
+        });
+        document.getElementById('categoryDropdown').addEventListener('click', function (event) {
+            if (event.target.classList.contains('dropdown-item')) {
+                var selectedCategory = event.target.getAttribute('data-value');
+                document.getElementById('categoryDropdownButton').textContent = selectedCategory[0].toUpperCase() + selectedCategory.slice(1);
+                updateIt(selectedCategory);
+            }
+        });
+        document.getElementById('optionDropdown').addEventListener('click', function (event) {
+            if (event.target.classList.contains('dropdown-item')) {
+                var selectedOption = event.target.textContent;
+                document.getElementById('optionDropdownButton').textContent = selectedOption;
+            }
+        });
         //Listeners to populate Drop Downs Dynamically
         document.addEventListener('DOMContentLoaded', fetchAges);
         document.addEventListener('DOMContentLoaded', fetchYears);
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('categoryDropdown').addEventListener('change', updateIt);
-        });
 
         //Function to update the selected Drop Down with options
-        function updateIt() {
-            var selectedThing = document.getElementById('categoryDropdown').value;
+        function updateIt(selectedThing) {
             if (selectedThing == 'age') {
                 fetchAges();
             }
@@ -169,12 +220,13 @@
             var dropdown = document.getElementById('optionDropdown');
             dropdown.innerHTML = '';
 
+
             choices.forEach(function (choice) {
-                var option = document.createElement('option');
-                option.text = choice;
-                option.value = choice;
-                dropdown.appendChild(option);
+                var listItem = document.createElement('li');
+                listItem.innerHTML = '<a class="dropdown-item" href="#">' + choice + '</a>';
+                dropdown.appendChild(listItem);
             });
+            document.getElementById('optionDropdownButton').textContent = choices[0];
             handleInputChange()
 
         }
@@ -183,12 +235,10 @@
             dropdown.innerHTML = '';
 
             years.forEach(function (year) {
-                var option = document.createElement('option');
-                option.text = year - 1 + ' - ' + year;
-                option.value = year;
+                var option = document.createElement('li');
+                option.innerHTML = '<a class="dropdown-item" href="#" data-value="' + year + '">' + (year - 1) + ' - ' + year + '</a>';
                 dropdown.appendChild(option);
             });
-
         }
         var lineChart;
         document.addEventListener('DOMContentLoaded', fetchData(2019, 'overall', 'overall', '0-<1 year', 'overall', 'cumulative_rate'));
@@ -196,8 +246,8 @@
 
         //Add listeners for the second drop down of options
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('yearDropdown').addEventListener('change', handleInputChange);
-            document.getElementById('optionDropdown').addEventListener('change', handleInputChange);
+            document.getElementById('yearDropdown').addEventListener('click', handleInputChange);
+            document.getElementById('optionDropdown').addEventListener('click', handleInputChange);
             var radioButtons = document.querySelectorAll('input[type="radio"][name="options"]');
             radioButtons.forEach(function (radioButton) {
                 radioButton.addEventListener('change', handleInputChange);
@@ -205,29 +255,35 @@
         });
 
         function handleInputChange() {
-            var selectedThing = document.getElementById('categoryDropdown').value;
+
+            var selectedThing = document.getElementById('categoryDropdownButton').textContent.trim();
+            console.log(selectedThing)
             var selectedAge = 'overall'
             var selectedSex = 'overall'
             var selectedRace = 'overall'
             var selectedSite = 'overall'
-            if (selectedThing == 'age') {
-                selectedAge = document.getElementById('optionDropdown').value;
+            if (selectedThing == 'Age') {
+                selectedAge = document.getElementById('optionDropdownButton').textContent;
             }
-            else if (selectedThing == 'sex') {
-                selectedSex = document.getElementById('optionDropdown').value;
+            else if (selectedThing == 'Sex') {
+                selectedSex = document.getElementById('optionDropdownButton').textContent;
             }
-            else if (selectedThing == 'race') {
-                selectedRace = document.getElementById('optionDropdown').value;
+            else if (selectedThing == 'Race') {
+                selectedRace = document.getElementById('optionDropdownButton').textContent;
             }
-            else if (selectedThing == 'site') {
-                selectedSite = document.getElementById('optionDropdown').value;
+            else if (selectedThing == 'Site') {
+                selectedSite = document.getElementById('optionDropdownButton').textContent;
             }
             else {
                 console.log("error")
             }
-            var selectedYear = document.getElementById('yearDropdown').value;
+            var selectedYear = document.getElementById('yearDropdownButton').textContent;
+            actualYear = selectedYear.split(' - ')[1];
+
+
             var selectedOption = document.querySelector('input[type="radio"][name="options"]:checked').value;
-            fetchData(selectedYear, selectedRace, selectedSex, selectedAge, selectedSite, selectedOption);
+            console.log(actualYear, selectedRace, selectedSex, selectedAge, selectedSite, selectedOption, "this")
+            fetchData(actualYear, selectedRace, selectedSex, selectedAge, selectedSite, selectedOption);
         }
 
 
@@ -279,14 +335,13 @@
                 alertPlaceholder.append(wrapper)
                 chartContainer.classList.add('small');
             }
-            var dropdown = document.getElementById("categoryDropdown");
+            var selectedCategory = document.getElementById('categoryDropdownButton').textContent.trim();
+            var selectedYear = document.getElementById('yearDropdownButton').textContent;
+            var selectedOption = document.getElementById('optionDropdownButton').textContent;
 
-            var selectedOption = dropdown.value;
-            var dropdown2 = document.getElementById("optionDropdown");
-            var selectedOption2 = dropdown2.value;
 
             if (weeklyRates.length == 0) {
-                appendAlert('No available data for: Flu Season ' + (year - 1) + ' - ' + year + ', Category: ' + selectedOption[0].toUpperCase() + selectedOption.slice(1) + ', Option: ' + selectedOption2, 'success')
+                appendAlert('No available data for: Flu Season ' + selectedYear + ', Category: ' + selectedCategory + ', Option: ' + selectedOption, 'success')
             }
             const removeAlert = () => {
                 chartContainer.classList.remove('small');
@@ -297,6 +352,10 @@
                     removeAlert();
                 }
             });
+            if (weeklyRates.length != 0) {
+                alertPlaceholder.innerHTML = '';
+                removeAlert();
+            }
 
 
             var ctx = document.getElementById('lineChart').getContext('2d');
@@ -372,6 +431,7 @@
         }
 
     </script>
+
 </body>
 
 </html>

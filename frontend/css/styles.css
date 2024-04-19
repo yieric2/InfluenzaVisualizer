@@ -6,48 +6,54 @@ html {
   height: 92% !important;
   font-family: 'Roboto' !important;
   background-color: #f1f9ff !important;
+  color: rgba(0,0,0,0.8) !important;
 }
 
 
-
+@font-face {
+  font-family: 'Roboto';
+  src: url('Roboto/Roboto-Regular.ttf') format('truetype');
+  /* Add additional font weights and styles as needed */
+}
 @media (min-width: 992px) {
   #navbar a.active {
     color: #000;
     font-weight: bold;
   }
 
-  .navbar {
-    position: fixed !important;
-    top: 0 !important;
-    height: 10vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #ccecee !important;
-    margin-left: calc(var(--bs-gutter-x) * -0.5);
-  }
+.navbar {
+   position: fixed !important;
+   top: 0 !important;
+   z-index: 1000 !important;
+   height: 10vh;
+   width: 100vw;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background-color: #ccecee !important;
+   margin-left: calc(var(--bs-gutter-x) * -0.5);
+ }
 
   .navbar-nav .nav-link:hover {
     color: #0d6efd;
     font-weight: bold;
   }
+  
+ .navbar .navbar-brand {
+   color: #000;
+   font-size: 30px;
+   font-family: Arial;
+   font-weight: bold;
+   text-decoration: none;
+   margin-left: 10%;
+ }
 
-  .navbar .navbar-brand {
-    color: #000;
-    font-size: 30px;
-    font-family: Arial;
-    font-weight: bold;
-    text-decoration: none;
-    margin-left: 20%;
-  }
-
-  .navbar .navbar-nav {
-    display: flex;
-    justify-content: space-around;
-    margin-left: 40%;
-    width: 50%;
-  }
+ .navbar .navbar-nav {
+   display: flex;
+   justify-content: space-around;
+   margin-left: 35%;
+   width: 40%;
+ }
 
   .navbar .navbar-nav .nav-item {
     color: #000;
@@ -70,6 +76,7 @@ html {
     --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
     --bs-navbar-toggler-border-color: rgba(var(--bs-emphasis-color-rgb), 0.15);
   }
+
 
   .navbar .navbar-collapse.show .navbar-nav {
     background-color: rgb(0, 0, 0);
@@ -136,17 +143,18 @@ html {
 
   .navbar .navbar-collapse {
     transition: none !important;
+
   }
 
   .navbar {
     stroke: white;
-    /* Change the stroke color to white */
   }
 
   .navbar-toggler {
     z-index: 1001;
   }
 }
+
 
 
 
@@ -195,17 +203,72 @@ html {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 70vh;
+    height: 66vh;
   }
 
   .chart-container.small {
-    height: 60vh;
+    height: 56vh;
   }
 
   .chart-container canvas {
     max-width: 70%;
     max-height: 100%;
   }
+}
+@media ((min-width: 992px) and (max-width: 1599px)) {
+  .chartParent {
+    display: flex;
+    justify-content: center;
+  }
+
+  .containerGraph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 58vh;
+  }
+
+  .containerGraph canvas {
+    max-width: 70%;
+    max-height: 100%;
+  }
+}
+@media (min-width: 1600px) {
+  .chartParent {
+    display: flex;
+    justify-content: center;
+  }
+
+  .containerGraph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 63vh;
+  }
+
+  .containerGraph canvas {
+    max-width: 70%;
+    max-height: 100%;
+  }
+}
+@media (max-width: 992px){
+
+  .chartParent {
+    display: flex;
+    justify-content: center;
+  }
+
+  .containerGraph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 70vh;
+  }
+
+
 }
 
 @media (max-width: 992px) {
@@ -217,83 +280,6 @@ html {
     height: 75vh;
   }
 }
-
-.chart-container2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 70vh;
-}
-
-.chart-container2 canvas {
-  max-width: 60%;
-  max-height: 100%;
-}
-
-.chart-container3 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 70vh;
-}
-
-.chart-container3 canvas {
-  max-width: 60%;
-  max-height: 100%;
-}
-
-.App {
-  margin-left: 10vw;
-  height: 80vh;
-  width: 80vw;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ffffff;
-}
-
-.textual-content {
-  flex: 1;
-}
-
-.image-container {
-  width: 45%;
-  height: auto;
-}
-
-.content h1 {
-  font-size: 3em;
-  color: #000;
-  margin-bottom: 20px;
-}
-
-.content p {
-  font-size: 1.5em;
-  color: #000;
-  margin-bottom: 20px;
-}
-
-.contact-info h2 {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-}
-
-.contact-item p {
-  margin-left: 8px;
-}
-
-.contact-item img {
-  width: 24px;
-  height: auto;
-}
-
 
 @media (min-width: 992px) {
   .text-container {
@@ -313,3 +299,77 @@ html {
     margin-bottom: 10px;
   }
 }
+@media (min-width: 992px) {
+   .topTitle{
+      margin-top: 13vh;
+      text-align: center;
+   }
+   .titleText{
+      margin-top: 13vh;
+      text-align: center;
+      letter-spacing: 0.10rem;
+   }
+}
+@media (max-width: 992px) {
+   .topTitle{
+      text-align: center;
+   }
+   .titleText{
+      text-align: center;
+      letter-spacing: 0.10rem;
+   }
+}
+
+
+.descriptions{
+    background-color: #eee;
+}
+
+.home h1 span{
+    color: #0d6efd;
+}
+
+.descriptions .content h2{
+    color: rgba(0,0,0,0.8);
+}
+
+.descriptions .content .box h3{
+    color: rgba(0,0,0,0.8);
+}
+
+.descriptions .content .box h3 i{
+    color: #0d6efd;
+}
+
+.descriptions .content .box p{
+    color: rgba(0,0,0,0.8);
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+    .home h1.display-4 {
+        font-size: 40px; 
+    }
+    .home .lead {
+        font-size: 21px; 
+    }
+    .home img {
+        max-width: 80%;
+        height: auto; 
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .home h1.display-4 {
+        font-size: 35px; 
+    }
+    .home p.lead {
+        font-size: 18px; /* Adjust the paragraph text slightly smaller */
+    }
+    .home img {
+        max-width: 100%; 
+        height: auto; 
+    }
+}
+
+
+

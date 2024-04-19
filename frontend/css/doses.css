@@ -1,0 +1,210 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto' !important;
+    background-color: #f1f9ff !important;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('Roboto/Roboto-Regular.ttf') format('truetype');
+  /* Add additional font weights and styles as needed */
+}
+@media (min-width: 992px) {
+     .first-text{
+       margin-top: 10vh;
+    }
+  }
+
+@media (min-width: 992px) {
+  #navbar a.active {
+    color: #000;
+    font-weight: bold;
+  }
+
+  .navbar {
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ccecee !important;
+    margin-left: calc(var(--bs-gutter-x) * -0.5);
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #0d6efd;
+    font-weight: bold;
+  }
+
+  .navbar .navbar-brand {
+    color: #000;
+    font-size: 30px;
+    font-family: Arial;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 20%;
+  }
+
+  .navbar .navbar-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 40%;
+    width: 50%;
+  }
+
+  .navbar .navbar-nav .nav-item {
+    color: #000;
+    font-size: 1.8vh;
+    text-decoration: none;
+  }
+
+  .navbar .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-toggler {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    --bs-navbar-toggler-border-color: white;
+  }
+  .navbar-toggler.collapsed {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    --bs-navbar-toggler-border-color: rgba(var(--bs-emphasis-color-rgb), 0.15);
+  }
+
+  .navbar .navbar-collapse.show .navbar-nav {
+    background-color: rgb(0, 0, 0);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+  }
+
+  .navbar .navbar-collapse.show .navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(78, 78, 78, 0.404);
+    border: 1px solid black;
+    box-sizing: border-box;
+  }
+
+  .navbar .navbar-nav .nav-item .icon {
+    margin-bottom: 8px;
+    width: 10vw;
+    height: 10vw;
+    fill: #fff;
+  }
+
+  .navbar .navbar-nav .nav-item .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ffffff;
+    font-size: 5vw;
+  }
+
+
+  .navbar .navbar-collapse.show .navbar-nav .nav-link {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .navbar .navbar-collapse.show .navbar-nav .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar .navbar-collapse.collapsing .navbar-nav {
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+
+  .navbar .navbar-collapse {
+    transition: none !important;
+  }
+
+  .navbar {
+    stroke: white;
+    /* Change the stroke color to white */
+  }
+
+  .navbar-toggler {
+    z-index: 1001;
+  }
+}
+
+
+.home-page {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+}
+
+.home-page a {
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+@media (min-width: 992px) {
+  .graph3 {
+      display: flex;
+      justify-content: center;
+    }
+
+  .chartContainer9{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 64vh;
+  }
+  .chartContainer9 canvas{
+      max-width: 100%;
+
+  }
+}
+
+.graph-title {
+    text-align: center;
+
+
+}
+@media (min-width: 992px) {
+   .titleText{
+      margin-top: 10vh;
+   }
+}
+.btn{
+    margin-right: 3px;
+}
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
+}
