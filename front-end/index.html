@@ -190,7 +190,7 @@
 
                 var temp = {
                     data: doses,
-                    label: 'Season: ' + season,
+                    label: season,
                     // Adding temporary data attribute to store startWeek and endWeek
 
                 };
@@ -205,7 +205,6 @@
                 data: influenza,
 
                 options: {
-
 
                     scales: {
 
@@ -236,14 +235,21 @@
                     },
 
                     plugins: {
+
                         legend: {
+                            labels: {
+                                padding: 15
+                            },
                             title: {
                                 display: true,
-                                text: 'Season',
+                                text: 'Seasons',
                                 font: {
                                     size: 16, // Set the font size for the x-axis title
-                                }
+                                    weight: 'bold',
+
+                                },
                             },
+
                             onHover: (event, chartElement) => {
                                 event.native.target.style.cursor = 'pointer'
                             },
@@ -275,7 +281,6 @@
                     }
                 }
             });
-
 
         }
 
