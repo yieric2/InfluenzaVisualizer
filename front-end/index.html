@@ -165,8 +165,9 @@
             //  console.log(type);
             const ctx = document.getElementById('myChart');
             if (window.innerWidth <= 768) { // Check if the screen width is less than or equal to 768px (typical breakpoint for tablets and mobiles)
-                ctx.height = window.innerHeight * 0.6; // Set chart height to 20vh 
+                ctx.height = window.innerHeight * 0.20; // Set chart height to 20vh 
             }
+
             var influenza = { // this dataset is used to graph multiple lines
                 labels: [],
                 datasets: [],
@@ -190,7 +191,7 @@
 
                 var temp = {
                     data: doses,
-                    label: season,
+                    label: 'Season: ' + season,
                     // Adding temporary data attribute to store startWeek and endWeek
 
                 };
@@ -206,6 +207,7 @@
 
                 options: {
 
+
                     scales: {
 
 
@@ -213,23 +215,15 @@
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Season Week',
-                                font: {
-                                    size: 16, // Set the font size for the y-axis title
-                                }
-                            },
-
+                                text: 'Season Week'
+                            }
                         },
                         y: {
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Cumulative Doses (Millions)',
-                                font: {
-                                    size: 16, // Set the font size for the y-axis title
-                                }
-                            },
-
+                                text: 'Cumulative Doses (Millions)'
+                            }
                         },
 
                     },
@@ -238,7 +232,7 @@
 
                         legend: {
                             labels: {
-                                padding: 15
+                                padding: 30
                             },
                             title: {
                                 display: true,
@@ -256,8 +250,6 @@
                             onLeave: (event, chartElement) => {
                                 event.native.target.style.cursor = 'default'
                             }
-                            ,
-
                         },
                         tooltip: {
                             callbacks: { // hovering over specific data point on line graph
@@ -281,6 +273,7 @@
                     }
                 }
             });
+
 
         }
 
