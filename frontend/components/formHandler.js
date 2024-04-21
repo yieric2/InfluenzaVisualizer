@@ -5,7 +5,7 @@ import { initMap } from './map.js';
  * @Constants and @global variables
  *
  */
-const APIKEY = 'AIzaSyDsDkpatA_CCPayZKAaKU8LLnjxypUbreo';
+const APIKEY = '';
 let providerLocationArr = [];
 const form = document.querySelector('form');
 const providerListElement = document.getElementById('provider-list');
