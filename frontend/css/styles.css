@@ -320,3 +320,75 @@ html {
    }
 }
 
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: #f1f9ff;
+    color: rgba(0,0,0,0.8);
+}
+
+.main-content {
+    max-width: 1140px;
+    margin: auto;
+}
+
+.main-content span {
+    color: #0d6efd;
+}
+
+.main-content h2 {
+    margin: 0.5rem 0;
+}
+
+.main-content .service-card-color h3 {
+    margin-bottom: 0.5rem;
+}
+
+.main-content .service-card-color p {
+    margin-top: 0.5rem;
+}
+
+.service-cards {
+    margin-top: 0.5rem;
+}
+
+.service-card-color {
+    background-color: #B3DBF5;
+    color: #333;
+    border: 1px solid #000;
+}
+
+.main-content .col {
+    padding: 1rem;
+}
+
+.main-content h3 {
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.main-content h3 i {
+    margin-right: 0.7rem;
+    color: #0d6efd; 
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 1rem; 
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content .col-lg-6 img {
+        max-width: 65%;
+        height: auto;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .main-content .col-lg-6 img {
+        max-width: 65%;
+        height: auto;
+        margin: 0 auto;
+    }
+}
