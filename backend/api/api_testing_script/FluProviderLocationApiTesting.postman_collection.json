@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "8098f515-4b9e-4521-946e-460721ea6493",
+		"name": "RDESystemAPITESTING",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30298664"
+	},
+	"item": [
+		{
+			"name": "LocalAPITest",
+			"item": [
+				{
+					"name": "AggregationOfProviderLocationAPI",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Respnose is under 200ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response should be json \",() => {\r",
+									"    pm.expect(pm.response.to.be.json)\r",
+									"})\r",
+									"pm.test(\"Response has correct structure\",  () => {\r",
+									"    let jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('COLUMNS');\r",
+									"    pm.expect(jsonData.COLUMNS).to.eql([\"LNG\", \"LAT\", \"CITY\", \"PHONENUM\"]);\r",
+									"    pm.expect(jsonData).to.have.property('DATA');\r",
+									"    pm.expect(jsonData.DATA).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each entry has correct data types\", () => {\r",
+									"    let jsonData = pm.response.json();\r",
+									"    jsonData.DATA.forEach(function (item) {\r",
+									"        pm.expect(item[0]).to.be.a('number'); // LNG\r",
+									"        pm.expect(item[1]).to.be.a('number'); // LAT\r",
+									"        pm.expect(item[2]).to.be.a('string'); // CITY\r",
+									"        pm.expect(item[3]).to.be.a('string'); // PHONENUM\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"pm.environment.set(\"LNG\", jsonData.DATA[5][0]);\r",
+									"pm.environment.set(\"LAT\", jsonData.DATA[5][1]);\r",
+									"\r",
+									"console.log(`This is the lng field ${jsonData.DATA[5][0]} and this the lat field ${jsonData.DATA[5][1]}`)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8500/Application/api/locationsAPI.cfm",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8500",
+							"path": [
+								"Application",
+								"api",
+								"locationsAPI.cfm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AggregateProviderLocatoinNearByProvidedLocation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 and Content-Type is JSON\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"pm.test(\"COLUMNS array contains the correct headers\", function () {\r",
+									"    let expectedColumns = [\"LONGITUDE\", \"LATITUDE\", \"WALKINS_ACCEPTED\", \"INSURANCE_ACCEPTED\", \"LOC_ADMIN_ZIP\", \"LOC_ADMIN_CITY\", \"LOC_ADMIN_STATE\", \"LOC_ADMIN_STREET1\", \"LOC_PHONE\", \"WEB_ADDRESS\", \"MONDAY_HOURS\", \"TUESDAY_HOURS\", \"WEDNESDAY_HOURS\", \"THURSDAY_HOURS\", \"FRIDAY_HOURS\", \"SATURDAY_HOURS\", \"SUNDAY_HOURS\", \"DISTANCE\"];\r",
+									"    let jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.COLUMNS).to.eql(expectedColumns);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time should be under 1100ms\", ()=> {\r",
+									"     pm.expect(pm.response.responseTime).to.be.below(1100);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8500/Application/App%202/backend/api/nearByLocations.cfm?lat={{LAT}}&lng={{LNG}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8500",
+							"path": [
+								"Application",
+								"App%202",
+								"backend",
+								"api",
+								"nearByLocations.cfm"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "{{LAT}}"
+								},
+								{
+									"key": "lng",
+									"value": "{{LNG}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Ensuring the endpoint are available and are responding in a reasonable amount of time"
+		}
+	]
+}

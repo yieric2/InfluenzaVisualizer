@@ -1,0 +1,10 @@
+npm init -y 
+npm install @google/maps
+npm install --save-dev jest
+npm install --save-dev @babel/preset-env
+npm build
+
+
+
+To run the tests:
+npm test
