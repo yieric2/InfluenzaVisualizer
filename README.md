@@ -3,8 +3,8 @@
 
 - [Table of content](#table-of-content)
 - [Senior Capstone Project](#senior-capstone-project)
-  - [Website Structure](#website-structure)
-    - [Pages description](#pages-description)
+   - [Website Structure](#website-structure)
+      - [Pages description](#pages-description)
       - [Provider Location](#provider-location)
       - [Demographics](#demographics)
       - [Doses Distribution](#doses-distribution)
