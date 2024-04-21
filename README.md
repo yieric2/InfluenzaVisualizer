@@ -24,19 +24,19 @@ https://www.influenzavisualizer.serverpit.com/
 
  The website consist of 4 differents pages
 
-#### Provider Location
+### Provider Location
 
 This page provides a detailed description of each flu vaccine provider's location. It features a search tool where the user is able to search for flu vaccination providers near their location.  
 
-#### Demographics
+### Demographics
 
 This page showcases the different demographic data about flu vaccination in the U.S for different flu seasons.
 
-#### Doses Distribution
+### Doses Distribution
 
 This page showcases the doses distribution in millions for each influenza seasons. The user is able to toggle different seasons to be shown on the graph
 
-#### Hospitalization Rates  
+### Hospitalization Rates  
 
 This page visualize the hospitalization rates for different flu seaons.  
 
