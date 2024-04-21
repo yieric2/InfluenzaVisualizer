@@ -4,52 +4,69 @@ body{
     color: rgba(0,0,0,0.8);
 }
 
-.descriptions{
-    background-color: #eee;
+.main-content {
+    max-width: 1140px;
+    margin: auto;
 }
 
-.home h1 span{
+.main-content span {
     color: #0d6efd;
 }
 
-.descriptions .content h2{
-    color: rgba(0,0,0,0.8);
+.main-content h2 {
+    margin: 0.5rem 0;
 }
 
-.descriptions .content .box h3{
-    color: rgba(0,0,0,0.8);
+.main-content .service-card-color h3 {
+    margin-bottom: 0.5rem;
 }
 
-.descriptions .content .box h3 i{
-    color: #0d6efd;
+.main-content .service-card-color p {
+    margin-top: 0.5rem;
 }
 
-.descriptions .content .box p{
-    color: rgba(0,0,0,0.8);
+.service-cards {
+    margin-top: 0.5rem;
 }
 
-@media (min-width: 768px) and (max-width: 991px){
-    .home h1.display-4 {
-        font-size: 40px; 
-    }
-    .home .lead {
-        font-size: 21px; 
-    }
-    .home img {
-        max-width: 80%;
-        height: auto; 
+.service-card-color {
+    background-color: #B3DBF5;
+    color: #333;
+    border: 1px solid #000;
+}
+
+.main-content .col {
+    padding: 1rem;
+}
+
+.main-content h3 {
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.main-content h3 i {
+    margin-right: 0.7rem;
+    color: #0d6efd; 
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 1rem; 
     }
 }
 
-@media (min-width: 992px) and (max-width: 1199px) {
-    .home h1.display-4 {
-        font-size: 35px; 
+@media (max-width: 768px) {
+    .main-content .col-lg-6 img {
+        max-width: 65%;
+        height: auto;
+        margin: 0 auto;
     }
-    .home p.lead {
-        font-size: 18px; /* Adjust the paragraph text slightly smaller */
-    }
-    .home img {
-        max-width: 100%; 
-        height: auto; 
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .main-content .col-lg-6 img {
+        max-width: 65%;
+        height: auto;
+        margin: 0 auto;
     }
 }
