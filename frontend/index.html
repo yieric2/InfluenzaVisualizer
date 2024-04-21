@@ -1,95 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Navigation Bar</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="index.html">
-                <svg width="29" height="29" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M13.6586 37.04C12.8349 39.3471 10.6124 41 8 41C4.68629 41 2 38.3406 2 35.06C2 31.7794 4.68629 29.12 8 29.12C10.6124 29.12 12.8349 30.7729 13.6586 33.08H31C33.7614 33.08 36 30.8638 36 28.13C36 25.3962 33.7614 23.18 31 23.18H9C4.02944 23.18 0 19.1909 0 14.27C0 9.3492 4.02944 5.36006 9 5.36006H15.1716L12.5858 2.80014L15.4142 0L22.8284 7.34006L15.4142 14.6801L12.5858 11.88L15.1716 9.32005H9C6.23858 9.32005 4 11.5362 4 14.27C4 17.0039 6.23858 19.22 9 19.22H31C35.9706 19.22 40 23.2092 40 28.13C40 33.0509 35.9706 37.04 31 37.04H13.6586ZM8 33.08C6.89543 33.08 6 33.9665 6 35.06C6 36.1535 6.89543 37.04 8 37.04C9.10457 37.04 10 36.1535 10 35.06C10 33.9665 9.10457 33.08 8 33.08ZM32 1.40007C35.3137 1.40007 38 4.05949 38 7.34006C38 10.6206 35.3137 13.28 32 13.28C28.6863 13.28 26 10.6206 26 7.34006C26 4.05949 28.6863 1.40007 32 1.40007ZM32 5.36006C30.8954 5.36006 30 6.24654 30 7.34006C30 8.43358 30.8954 9.32005 32 9.32005C33.1046 9.32005 34 8.43358 34 7.34006C34 6.24654 33.1046 5.36006 32 5.36006Z"
-                        fill="black" />
-                </svg>
-                Influenza Visualizer
-            </a>
-            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="page1.html" id="page1-link">
-                            <svg fill="#404040" class="icon" width="34" height="24" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
 
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                                
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.384"/>
-                                
-                                <g id="SVGRepo_iconCarrier"> <path d="M16.114-0.011c-6.559 0-12.114 5.587-12.114 12.204 0 6.93 6.439 14.017 10.77 18.998 0.017 0.020 0.717 0.797 1.579 0.797h0.076c0.863 0 1.558-0.777 1.575-0.797 4.064-4.672 10-12.377 10-18.998 0-6.618-4.333-12.204-11.886-12.204zM16.515 29.849c-0.035 0.035-0.086 0.074-0.131 0.107-0.046-0.032-0.096-0.072-0.133-0.107l-0.523-0.602c-4.106-4.71-9.729-11.161-9.729-17.055 0-5.532 4.632-10.205 10.114-10.205 6.829 0 9.886 5.125 9.886 10.205 0 4.474-3.192 10.416-9.485 17.657zM16.035 6.044c-3.313 0-6 2.686-6 6s2.687 6 6 6 6-2.687 6-6-2.686-6-6-6zM16.035 16.044c-2.206 0-4.046-1.838-4.046-4.044s1.794-4 4-4c2.207 0 4 1.794 4 4 0.001 2.206-1.747 4.044-3.954 4.044z"/> </g>
-                                
-                                </svg>
-                            Locations
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="page2.cfm" id="page2-link">
-                            <svg version="1.1" class="icon" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" width="34" height="24" fill="#404040">
+<div class="container main-content">
+    <div class="row min-vh-100 align-items-center text-center">
+        <div class="col-lg-6 mb-3 mb-lg-0">
+            <img src="images/home.svg" class="img-fluid" alt="Home Image">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-4">Visualize <span>Flu Data</span><br>from the CDC</h1>
+            <p class="lead">Our Influenza Visualizer brings progressive and accessible visualizations of flu data to both mobile and desktop users.</p>
+        </div>
 
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                                
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                                
-                                <g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} </style> <g> <g> <path d="M19.5,28H2.2c0.6-2,2.2-3.5,4.2-4.1c2.7-0.7,4.5-3.1,4.5-5.8c0-0.4-0.2-0.7-0.5-0.9C9,16.4,8.1,14.7,8,12.9 c0-0.7,0.5-1.4,1.2-1.6l1.1-0.4c0.4-0.1,0.7-0.5,0.7-0.9V6.8c1.8,2.5,4.4,4.2,7.3,4.9C18.1,12.1,18,12.5,18,13 c0,1.8-1,3.4-2.5,4.3c-0.3,0.2-0.5,0.5-0.5,0.9c0,2.2,1.2,4.1,3,5.1c0.1-0.7,0.3-1.4,0.6-2c-0.9-0.6-1.5-1.6-1.6-2.6 c1.8-1.3,3-3.4,3-5.7c0-0.6,0.4-1,1-1c0.6,0,1-0.4,1-1V8.7c0-3.4-2.5-6.3-5.8-6.7c-2-0.2-4,0.5-5.4,2C9.8,3.9,8.9,4.2,8,4.9 C6.7,5.8,6,7.3,6,9v3.8c0,0,0,0.1,0,0.1c0,0,0,0.1,0,0.1c0,0,0,0.1,0,0.1c0.1,2.2,1.2,4.3,2.9,5.6c-0.2,1.6-1.4,2.9-3,3.3 c-3,0.8-5.2,3.1-5.8,6.1c-0.1,0.5,0,0.9,0.3,1.3C0.8,29.8,1.2,30,1.7,30H24C22.2,30,20.6,29.2,19.5,28z"/> </g> <g> <path d="M24,30h0.3c0.1,0,0.2,0,0.4,0C24.5,30,24.2,30,24,30z"/> </g> </g> <g> <path d="M25,23h6.9c-0.2-1.7-1-3.4-2.3-4.7s-3-2.1-4.7-2.3V23z"/> <path d="M24,25c-0.6,0-1-0.4-1-1v-7.9c-1.7,0.2-3.4,1-4.7,2.3c-3.1,3.1-3.1,8.2,0,11.3s8.2,3.1,11.3,0c1.3-1.3,2.1-3,2.3-4.7H24z"/> </g> </g>
-                                
-                                </svg>
-                            Demographics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="page3.html" id="page3-link">
-                            <svg class="icon" fill="#404040" height="24" width="34" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" xml:space="preserve">
-
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                                
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                                
-                                <g id="SVGRepo_iconCarrier"> <g> <g> <path d="M505.673,107.124c-9.658-9.657-91.227-91.227-100.798-100.798c-8.433-8.434-22.108-8.434-30.542,0s-8.434,22.108,0,30.542 l12.248,12.248l-58.898,58.898c-24.93-24.93-30.011-30.011-51.072-51.072c-8.433-8.434-22.108-8.434-30.542,0 c-8.434,8.434-8.434,22.108,0,30.542l23.552,23.552L71.077,309.58c-8.434,8.434-8.434,22.108,0,30.542l35.129,35.129l-99.88,99.88 c-8.434,8.434-8.434,22.108,0,30.542c8.433,8.434,22.108,8.436,30.542,0l99.88-99.88l35.129,35.129 c8.433,8.433,22.108,8.434,30.542,0l198.546-198.546l23.552,23.552c8.433,8.434,22.108,8.436,30.542,0 c8.434-8.434,8.434-22.108,0-30.542c-21.054-21.054-26.152-26.152-51.072-51.072l58.898-58.897l12.248,12.248 c8.433,8.434,22.108,8.436,30.542,0C514.107,129.232,514.107,115.558,505.673,107.124z M187.147,395.109l-70.256-70.257 l28.516-28.516l18.325,18.325c8.433,8.433,22.108,8.434,30.542,0c8.434-8.434,8.434-22.108,0-30.542l-18.325-18.325l17.307-17.308 l18.325,18.325c8.433,8.434,22.108,8.436,30.542,0c8.434-8.434,8.434-22.108,0-30.542l-18.325-18.325l17.307-17.307l18.325,18.325 c8.433,8.434,22.108,8.436,30.542,0c8.434-8.434,8.434-22.108,0-30.542l-18.325-18.325l28.518-28.518 c7.059,7.059,63.202,63.202,70.257,70.257L187.147,395.109z M373.444,153.773l-15.218-15.218l58.897-58.897l15.218,15.218 L373.444,153.773z"/> </g> </g> </g>
-                                
-                                </svg>
-                            Distribution
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="page4.html" id="page4-link">
-                            <svg class="icon" width="34" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                                
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                                
-                                <g id="SVGRepo_iconCarrier"> <path d="M2 22H22" stroke="#404040" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/> <path d="M17 2H7C4 2 3 3.79 3 6V22H21V6C21 3.79 20 2 17 2Z" stroke="#404040" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/> <path d="M14.06 15H9.92998C9.41998 15 8.98999 15.42 8.98999 15.94V22H14.99V15.94C15 15.42 14.58 15 14.06 15Z" stroke="#404040" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12 6V11" stroke="#404040" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/> <path d="M9.5 8.5H14.5" stroke="#404040" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/> </g>
-                                
-                                </svg>
-                            Rates
-                        </a>
-                    </li>
-                </ul>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2>Our Services</h2>
             </div>
-        </nav>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 service-cards">
+            <div class="col">
+                <div class="h-100 p-3 rounded-3 service-card-color"">
+                    <h3><i class="fas fa-location-dot"></i>Flu Vaccination Provider Locations</h3>
+                    <p>Utilize the Google Maps API to discover a comprehensive list of flu vaccination providers in the U.S.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-3 rounded-3 service-card-color"">
+                    <h3><i class="fas fa-user-group"></i>Demographics for Flu Vaccination Coverage</h3>
+                    <p>View a detailed bar graph displaying flu vaccination rates among various demographic groups.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-3 rounded-3 service-card-color">
+                    <h3><i class="fas fa-syringe"></i>Flu Vaccination Doses Distributed</h3>
+                    <p>Explore the distribution of flu vaccination doses through dynamic line and bar graphs.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-3 rounded-3 service-card-color">
+                    <h3><i class="fas fa-procedures"></i>Flu Season Hospitalization Rates</h3>
+                    <p>Visualize flu hospitalization rates by weekly or cumulative rates per 100,000 individuals.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
