@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="doses.css">
+    <title>Influenza's vaccine doses in millions</title>
+</head>
+
+<body>
+    <header id="navbar">
+        <!-- Navigation bar will be loaded here -->
+    </header>
+    <script>
+        // Load navigation bar
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navigation bar:', error);
+            });
+
+    </script>
+
+    <div class="container mt-3">
+        <h2 class="text-center mb-3">Cumulative Doses in Millions</h2>
+
+        <div class="d-flex justify-content-center mb-3">
+
+
+            <div class="dropdown" id="start">
+                From:
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonStart"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Week 1
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonStart" id="startWeekDropdown">
+                </div>
+            </div>
+            <div class="dropdown" id="end">
+                To:
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonEnd"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                    Week 31
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonEnd" id="endWeekDropdown">
+
+                </div>
+
+
+            </div>
+            <div class="dropdown" id="start">
+                Chart Type:
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="chartType"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Chart Type
+                </button>
+                <div class="dropdown-menu" aria-labelledby="chartType" id="graphFilter">
+                    <a class="dropdown-item" href="#" id="lineGraph">Line</a>
+
+                    <a class="dropdown-item" href="#" id="barGraph">Bar</a>
+                    <a class="dropdown-item" href="#" id="scatterGraph" style="display: none;">Scatter</a>
+                    <!---Giving me issue with updating week data, not available.-->
+                </div>
+
+            </div>
+        </div>
+        <canvas id="myChart"></canvas>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="text-center">
+                Overall, the <span id="seasonHigh" style="font-weight: bold;"></span> Season had
+                the most amount of doses distributed with
+                <span id="dosesHigh" style="font-weight: bold;"></span> million doses distributed
+                at the end of the season.
+                On the other hand, the <span id="seasonLow" style=" font-weight: bold;"></span>
+                season had the lowest amount of doses distributed with
+                <span id="dosesLow" style="font-weight: bold;"></span> million doses distributed at
+                the end of the season.
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+
+        const endpointUrl = "../back-end/api.cfm/doses";
+        var cumulDoses = {};
+        var allTimeHigh = null;
+        var allTimeLow = null;
+        function fetchData() {
+            fetch(endpointUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Output data to console
+                    data.forEach(item => {
+
+                        const season = item['Season'.toUpperCase()];
+                        const week = item['WeekSeasonOrder'.toUpperCase()];
+                        const doses = item['CumulativeDoses'.toUpperCase()];
+                        let startWeek = item['WeekStartDate'.toUpperCase()];
+                        let endWeek = item['WeekEndDate'.toUpperCase()];
+                        startWeek = startWeek.replace(/00:00:00$/, '');
+                        endWeek = endWeek.replace(/00:00:00$/, '');
+                        if (!allTimeHigh || doses > allTimeHigh.doses) {
+                            allTimeHigh = { season: season, doses: doses };
+                        }
+
+                        if (!cumulDoses[season]) {
+                            cumulDoses[season] = [];
+                        }
+
+                        cumulDoses[season].push({ week: week, doses: doses, startWeek: startWeek, endWeek: endWeek });
+
+
+                        //  container.appendChild(paragraph);
+
+                    });
+                    for (const season in cumulDoses) {
+                        const dosesArray = cumulDoses[season];
+                        const lastDoses = dosesArray[dosesArray.length - 1].doses; // Accessing the last element of the array
+
+                        if (!allTimeLow || lastDoses < allTimeLow.doses) {
+                            allTimeLow = { season: season, doses: lastDoses };
+                        }
+                    }
+                    updateDescription();
+
+                    renderChart('line'); // Default chart, all influenza season
+
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                });
+        }
+
+
+        let chart = null;
+
+        function renderChart(type) { // default behavior on page load
+            if (chart) {
+                chart.destroy();
+            }
+            //  console.log(type);
+            const ctx = document.getElementById('myChart');
+            if (window.innerWidth <= 768) { // Check if the screen width is less than or equal to 768px (typical breakpoint for tablets and mobiles)
+                ctx.height = window.innerHeight * 0.20; // Set chart height to 20vh 
+            }
+
+            var influenza = { // this dataset is used to graph multiple lines
+                labels: [],
+                datasets: [],
+
+
+            }
+            var startWeeks = {}; // Store start weeks for each season
+            var endWeeks = {}; // Store end weeks for each season
+
+            for (let i = 0; i <= 31; i++) {
+                influenza.labels.push(i); // label is populated using for loop
+            }
+            for (var season in cumulDoses) {
+
+                var doses = cumulDoses[season].map(obj => obj.doses); // doses are retrieved from the cumulDose array for specific season
+                var startWeek = cumulDoses[season].map(obj => obj.startWeek);
+                var endWeek = cumulDoses[season].map(obj => obj.endWeek);
+
+                startWeeks[season] = startWeek; // Store startWeek array for this season
+                endWeeks[season] = endWeek; // Store endWeek array for this season
+
+                var temp = {
+                    data: doses,
+                    label: season,
+                    // Adding temporary data attribute to store startWeek and endWeek
+
+                };
+                influenza.datasets.push(temp); // for each year season, push its dataset
+
+
+            }
+
+            // TODO if possible make hoverable. 
+            chart = new Chart(ctx, {
+                type: type,
+                data: influenza,
+
+                options: {
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Season Week',
+                                font: {
+                                    size: 16, // Set the font size for the y-axis title
+                                }
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Cumulative Doses (Millions)',
+                                font: {
+                                    size: 16, // Set the font size for the y-axis title
+                                }
+                            }
+                        },
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+                            labels: {
+                                padding: 12
+                            },
+                            title: {
+                                display: true,
+                                text: 'Seasons (Click to add/remove seasons)',
+                                font: {
+                                    size: 16, // Set the font size for the x-axis title
+                                    weight: 'bold',
+
+                                },
+                            },
+
+                            onHover: (event, chartElement) => {
+                                event.native.target.style.cursor = 'pointer'
+                            },
+                            onLeave: (event, chartElement) => {
+                                event.native.target.style.cursor = 'default'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: { // hovering over specific data point on line graph
+                                // We're adding more info for the user. 
+                                title: function (context) {
+                                    var title = 'Week: ' + context[0].label; // Add 'Week: ' prefix to the title
+                                    return title;
+                                },
+
+                                label: function (context) {
+                                    var label = context.dataset.label || '';
+
+                                    var season = label.split(': ')[1]; // Extract season from label
+                                    var startWeek = startWeeks[season][context.dataIndex]; // Get start week for this season
+                                    var endWeek = endWeeks[season][context.dataIndex]; // Get end week for this season
+                                    var doses = context.parsed.y + ' million cumulative doses'; // Get doses from tooltip
+                                    return ' ' + doses + ' From: ' + startWeek + ' To: ' + endWeek;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+        }
+
+        function updateDescription() {
+            const seasonHigh = document.getElementById("seasonHigh");
+            const dosesHigh = document.getElementById("dosesHigh");
+            const seasonLow = document.getElementById("seasonLow");
+            const dosesLow = document.getElementById("dosesLow");
+            //   console.log(allTimeHigh);
+            if (allTimeHigh) {
+                seasonHigh.textContent = allTimeHigh.season;
+                dosesHigh.textContent = allTimeHigh.doses;
+            }
+            if (allTimeLow) {
+                seasonLow.textContent = allTimeLow.season;
+                dosesLow.textContent = allTimeLow.doses;
+            }
+        }
+
+        function resetFilterText() { // typically called on chart type change
+            const startDropdownMenu = document.getElementById("dropdownMenuButtonStart");
+            const endDropdownMenu = document.getElementById("dropdownMenuButtonEnd");
+            startDropdownMenu.textContent = "Week 1"; // Corrected property name to textContent
+            endDropdownMenu.textContent = "Week 31"; // Corrected property name to textContent
+        }
+
+        const lineGraph = document.getElementById("lineGraph");
+        const barGraph = document.getElementById("barGraph");
+        // const scatterGraph = document.getElementById("scatterGraph");
+        const chartType = document.getElementById("chartType");
+        chartType.textContent = "Line";
+
+        lineGraph.addEventListener("click", function () {
+            chartType.textContent = "Line";
+            resetFilterText();
+            renderChart('line');
+
+        });
+        barGraph.addEventListener("click", function () {
+            chartType.textContent = "Bar";
+            resetFilterText();
+
+            renderChart('bar');
+
+        });
+
+        fetchData(); // fetch data from back end endpoint
+        getStartMenu(); // set the dropdown menu 
+        getEndMenu(1); // default value on page load.
+
+        function getStartMenu() {
+            const startDropdownMenu = document.getElementById("startWeekDropdown");
+            const startDropdownName = document.getElementById("dropdownMenuButtonStart");
+            // Loop to create 31 weeks
+            for (let i = 1; i <= 30; i++) {
+                // Create a new <a> element for each week dynamically
+                const weekItem = document.createElement("a");
+                weekItem.classList.add("dropdown-item");
+                weekItem.href = "#";
+                weekItem.textContent = "Week " + i;
+                weekItem.addEventListener("click", function () {
+                    // Change the button text to the selected week
+                    startDropdownName.textContent = "Week " + i;
+                    getEndMenu(i);
+                });
+                // Append the week item to the dropdown menu
+                startDropdownMenu.appendChild(weekItem);
+            }
+        }
+
+        function getEndMenu(startIndex) {
+
+            const endDropdownMenu = document.getElementById("endWeekDropdown");
+            const endDropdownName = document.getElementById("dropdownMenuButtonEnd");
+            endDropdownName.disabled = false;
+            endDropdownMenu.innerHTML = '';
+            endDropdownName.textContent = "Select Week";
+
+            for (let i = startIndex + 1; i <= 31; i++) {
+                const weekItemEnd = document.createElement("a");
+                weekItemEnd.classList.add("dropdown-item");
+                weekItemEnd.href = "#";
+                weekItemEnd.textContent = "Week " + i;
+                weekItemEnd.addEventListener("click", function () {
+                    endDropdownName.textContent = "Week " + i;
+                    updateGraph(startIndex, i); // i = end week index
+
+                });
+                endDropdownMenu.appendChild(weekItemEnd);
+
+            }
+
+        }
+        // Keep track of OG dataset its kinda dumb but this is the only this works with implementaiton
+        // I have
+        let originalDatasets = [];
+
+        function updateGraph(startIndex, endIndex) {
+            const ctx = document.getElementById('myChart');
+            const chart = Chart.getChart(ctx);
+
+            // Check if original datasets are already stored
+            if (originalDatasets.length === 0) {
+                // Store original datasets if not already stored
+                originalDatasets = JSON.parse(JSON.stringify(chart.data.datasets));
+            }
+
+            // Update chart data with new start and end weeks
+            const labels = [];
+            const datasets = [];
+
+            for (let i = startIndex; i <= endIndex; i++) {
+                labels.push(i); // update x axis label
+            }
+
+            // Iterate through each dataset (seasons) and update its data array
+            for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
+                const originalData = originalDatasets[datasetIndex].data;
+                // console.log(datasetIndex);
+                // console.log(originalData);
+                const updatedData = originalData.slice(startIndex - 1, endIndex); // slice data into only portion we need
+                datasets.push({ label: originalDatasets[datasetIndex].label, data: updatedData }); // push onto new dataset
+            }
+
+            // Update the chart's labels and datasets
+            chart.data.labels = labels;
+            chart.data.datasets = datasets;
+
+            // Update the chart
+            chart.update();
+        }
+    </script>
+</body>
+
+</html>
