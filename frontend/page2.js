@@ -55,6 +55,14 @@ var myChart = new Chart(ctx, {
                     size : initialFontSize + 2
                 }
             },
+            subtitle: {
+                display: true,
+                text: '(Toggle Demographics)',
+                font: {
+                    size : initialFontSize + 1,
+                    weight : 'normal'
+                }
+            },
             legend: {
                 onHover : (event, chartElement) => {
                     event.native.target.style.cursor = 'pointer'
@@ -138,6 +146,19 @@ const alertTrigger = (message, type) => {
     alertPlaceholder.scrollIntoView({behavior : 'smooth'});
 }
 
+const getSelectedOption = (id) => {
+    const dropdown = document.getElementById(id);
+
+    // Get the selected option
+    const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+    // Get the value of the selected option
+    const name = selectedOption.text;
+
+    return name;
+    
+}
+
 const getCoverage = async() => {
     try{
         //disable apply button
@@ -154,6 +175,7 @@ const getCoverage = async() => {
             age_group : [],
             race_ethn : []
         }
+
         let checkboxCount = 0;
 
         const coverage_form = document.getElementById("coverage_form");
@@ -187,6 +209,7 @@ const getCoverage = async() => {
         });
 
         if (!response.ok) {
+            alertTrigger("Sorry, Something Went Wrong On Our End", "danger");
             throw new Error('Bad status code from server');
         }
 
@@ -198,7 +221,36 @@ const getCoverage = async() => {
 
         // If no data then do not update
         if(rowData.length === 0){
-            alertTrigger("Sorry, No Data Available For The Selected Demographic", "danger");
+             // Get the geography element
+            const geographyName = getSelectedOption('geography');
+            // Get the influenza type element
+            const influenzaType = getSelectedOption('influenza_type');
+            // Get the season element
+            const season = getSelectedOption('season');
+            const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+            // Create an array to store the labels of selected checkboxes
+            const selectedLabels = [];
+
+            // Iterate over each checkbox
+            checkBoxes.forEach((checkbox) => {
+                // Check if the checkbox is selected
+                if (checkbox.checked) {
+                    // Get the associated label using the "for" attribute or "nextElementSibling" property
+                    const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                    // Push the label text content to the array
+                    selectedLabels.push(label.textContent);
+                }
+            });
+            const message = `Sorry, No Data Available For The Following Options
+            <br>
+            Geography: ${geographyName}
+            <br>
+            Influenza Type: ${influenzaType}
+            <br>
+            Season: ${season}
+            <br>
+            Age Group or Race/Ethnicity: ${selectedLabels.join(', ')}`
+            alertTrigger(message, "danger");
             throw new Error("Sorry No Data");
         }
 
@@ -236,31 +288,11 @@ const getCoverage = async() => {
 
         // Update Title
         // Get the geography element
-        const geographyDropdown = document.getElementById("geography");
-
-        // Get the selected option
-        const selectedGeographyOption = geographyDropdown.options[geographyDropdown.selectedIndex];
-
-        // Get the value of the selected option
-        const geographyName = selectedGeographyOption.text;
-
-        // Get the influenza type type element
-        const influenzaTypeDropdown = document.getElementById("influenza_type");
-
-        // Get the selected option
-        const selectedInfluenzaTypeOption = influenzaTypeDropdown.options[influenzaTypeDropdown.selectedIndex];
-
-        // Get the value of the selected option
-        const influenzaType = selectedInfluenzaTypeOption.text;
-
+        const geographyName = getSelectedOption('geography');
+        // Get the influenza type element
+        const influenzaType = getSelectedOption('influenza_type');
         // Get the season element
-        const seasonDropdown = document.getElementById("season");
-
-        // Get the selected option
-        const selectedSeasonOption = seasonDropdown.options[seasonDropdown.selectedIndex];
-
-        // Get the value of the selected option
-        const season = selectedSeasonOption.text;
+        const season = getSelectedOption('season');
 
         myChart.options.plugins.title.text = `${influenzaType} Coverage For ${geographyName} : ${season}`
         myChart.update();
