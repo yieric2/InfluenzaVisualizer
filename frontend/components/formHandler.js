@@ -5,7 +5,7 @@ import { initMap } from './map.js';
  * @Constants and @global variables
  *
  */
-const APIKEY = '{API_KEY}';
+const APIKEY = 'AIzaSyDsDkpatA_CCPayZKAaKU8LLnjxypUbreo';
 let providerLocationArr = [];
 const form = document.querySelector('form');
 const providerListElement = document.getElementById('provider-list');
@@ -66,7 +66,6 @@ function updateQueryResult() {
       queryResult.innerHTML = `<li class="list-group-item" style="font-weight: bold; font-family: Roboto;">Searching for providers within ${selectedMiles} miles of ${address}</li>`;
       searchButton.classList.remove('hidden');
   }  else {
-      console.log('Address:', address, 'Miles:', selectedMiles);
       queryResult.innerHTML = ''; 
       searchButton.classList.add('hidden');
   }
@@ -100,10 +99,8 @@ async function geocodeAddressandPopulate(address) {
     console.error('Invalid Address');
     return;
   }
-  console.log('Entered Address:', address);
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${APIKEY}`;
   try {
-    console.log(url)
     const response = await fetch(url);
     const location = await handleGeocodeResponse(response);
     const nearbyLocations = await fetchNearbyLocations(location);
@@ -134,7 +131,6 @@ function handleGeocodeResponse(response) {
         console.log("No results found");
         providerListElement.innerHTML = '<li class="list-group-item"><strong>Location Not Found:</strong> Your entry was not precise enough to determine a specific location. Please provide a more specific city, address, and/or ZIP code. 🤓</li>';
         providerListElement.classList.remove('hidden')
-        console.log(providerListElement.innerHTML);
         throw new Error("No results found");
         r
       }
@@ -158,7 +154,6 @@ function fetchNearbyLocations(location) {
   new_position.lat = lat;
   new_position.lng = lng;
   const nearbyLocationsUrl = `/Application/api/nearByLocations.cfm?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&miles=${encodeURIComponent(selectedMiles)}`;
-  console.log('Nearby Locations URL:', nearbyLocationsUrl)
   return fetch(nearbyLocationsUrl)
     .then(response => {
       if (!response.ok) {
@@ -170,7 +165,6 @@ function fetchNearbyLocations(location) {
 
 // Handles nearby locations by creating ProviderLocationModel instances for each location and populating the provider list
 function handleNearbyLocationsResponse(data) {
-  console.log('Nearby Locations:', data);
   providerLocationArr = data.DATA.map(loc => new ProviderLocationModel({
     longitude: loc[0],
     latitude: loc[1],
@@ -209,10 +203,15 @@ function populateProviderList() {
 
       // Can be extracted and implemented standalone to improve readability but found this to be less computationally expensive.
       // Alternative would have me use 2 identical loops
-      markers.push(create_marker({
-        coords: {lat: providerLocation.latitude, lng: providerLocation.longitude},
+      markers.push(create_nearby_markers({
+        coords: {lat: providerLocation.latitude, lng: providerLocation.longitude}, 
         city: providerLocation.locAdminCity,
-        number: providerLocation.locPhone
+        number: providerLocation.locPhone,
+        insuranceAccepted: providerLocation.insuranceAccepted,
+        locAdminStreet1: providerLocation.locAdminStreet1,
+        locAdminCity: providerLocation.locAdminCity,
+        locAdminState: providerLocation.locAdminState,
+        locAdminZip: providerLocation.locAdminZip
       }));
       const a = document.createElement('a');
       a.href = '#';
@@ -225,10 +224,15 @@ function populateProviderList() {
         if(selectLocation){
           selectLocation.setMap(null);
         }
-        selectLocation = await create_marker({
+        selectLocation = await create_nearby_markers({
           coords: {lat: providerLocation.latitude, lng: providerLocation.longitude}, 
           city: providerLocation.locAdminCity,
-          number: providerLocation.locPhone
+          number: providerLocation.locPhone,
+          insuranceAccepted: providerLocation.insuranceAccepted,
+          locAdminStreet1: providerLocation.locAdminStreet1,
+          locAdminCity: providerLocation.locAdminCity,
+          locAdminState: providerLocation.locAdminState,
+          locAdminZip: providerLocation.locAdminZip
         },
           '#67f062')
       });
@@ -254,6 +258,7 @@ function validateRange(lat, long) {
 
 async function updateMap(){
   try {
+    markers = [];
     const { Map } = await google.maps.importLibrary("maps");
     new_map = new Map(document.getElementById("map"), 
     {
@@ -272,26 +277,25 @@ async function updateMap(){
       gestureHandling: "greedy"
     });
     create_user_marker({coords: new_position});
-    console.log('Markers:', markers.length)
    // const markerCluster = new markerClusterer.MarkerClusterer({ markers: markers, map: new_map });
   } catch (error) {
     console.error('Error updating map:', error);
   }
 }
 
-async function create_marker(provider, color='#ea4335') {
-  const { AdvancedMarkerElement,PinElement } = await google.maps.importLibrary("marker");
+async function create_nearby_markers(location, color='#ea4335') {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
   const pin = new PinElement({
     background: color,
   });
+
   const marker = new AdvancedMarkerElement({
     map: new_map,
-    position: provider.coords,
+    position: location.coords,
     content: pin.element
   }); 
-
   const infoWindow = new google.maps.InfoWindow({
-    content: `<h5> ${provider.city} </h5>` + `<p><b>Store number: ${provider.number}</b></p>`
+    content: infoWindowContent(location)
   });
   marker.addListener("click", () => {
     infoWindow.open(new_map, marker);
@@ -300,7 +304,6 @@ async function create_marker(provider, color='#ea4335') {
     }
     , 5000);
   });
-  
   return marker;
 }
 
@@ -325,4 +328,15 @@ async function create_user_marker(location, color='blue') {
     }
     , 5000);
   });
+}
+
+function infoWindowContent(provider) {
+  return `
+    <div>
+      <h6>${provider.city}</h6>
+      <p>Store number: ${provider.number}</p>
+      <p>Insurance Accepted: ${provider.insuranceAccepted}</p>
+      <p>Address: ${provider.locAdminStreet1}, ${provider.locAdminCity}, ${provider.locAdminState} ${provider.locAdminZip}</p>
+    </div>
+  `;
 }

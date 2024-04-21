@@ -2,37 +2,7 @@ let map = null;
 let markers = [];
 let position = { lat: 41.098432, lng: -99.189222 };
 let zoom = 4;
-const clustStyle = [
-  {
-    textColor: "white",
-    url: "/Application/App 2/frontend/components/images/BlueCircle.png",
-    height: 50,
-    width: 50,
-  },
-  {
-    textColor: "white",
-    url: "/Application/App 2/frontend/components/images/BlueCircle.png",
-    height: 50,
-    width: 50,
-  },
-  {
-    textColor: "white",
-    url: "/Application/App 2/frontend/components/images/RedCircle.png",
-    height: 50,
-    width: 50,
-  },
-]
 
-const mcOptions = {
-  styles: clustStyle,
-  maxZoom: 10,
-  gridSize: 50
-  // averageCenter: true,
-  // minimumClusterSize: 2,
-  // zoomOnClick: true,
-  // imagePath: "./images/m",
-  // imageExtension: "png",
-}
 
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
@@ -99,7 +69,8 @@ async function initMap() {
         const number = item[numberIndex] 
         create_marker({ coords: { lat: latitude, lng: longitude }, city: city, number: number});
       });
-      const markerCluster = new markerClusterer.MarkerClusterer({ markers, map,renderer: {
+      const markerCluster = new markerClusterer.MarkerClusterer({ markers, map
+        ,renderer: {
         render : ({markers, _position: position}) => {
           return new google.maps.Marker({
             position,
