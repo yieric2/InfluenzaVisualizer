@@ -265,7 +265,6 @@
                                     var label = context.dataset.label || '';
 
                                     // Check if the label format includes "Season: ", if not use label directly
-                                    var season = label.includes(': ') ? label.split(': ')[1] : label;
 
                                     var startWeek = startWeeks[season][context.dataIndex]; // Get start week for this season
                                     var endWeek = endWeeks[season][context.dataIndex]; // Get end week for this season
