@@ -5,7 +5,6 @@ import { initMap } from './map.js';
  * @Constants and @global variables
  *
  */
-const APIKEY = '';
 let providerLocationArr = [];
 const form = document.querySelector('form');
 const providerListElement = document.getElementById('provider-list');
@@ -99,7 +98,7 @@ async function geocodeAddressandPopulate(address) {
     console.error('Invalid Address');
     return;
   }
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${APIKEY}`;
+  const url = `http://127.0.0.1:3000/api/geocode?address=${encodeURIComponent(address)}`;
   try {
     const response = await fetch(url);
     const location = await handleGeocodeResponse(response);
@@ -112,6 +111,33 @@ async function geocodeAddressandPopulate(address) {
   }
 }
 
+// async function geocodeAddressandPopulate(address) {
+//   if (!address) {
+//     console.error('Invalid Address');
+//     return;
+//   }
+
+//   // URL to your own API endpoint
+//   const url = `http://127.0.0.1:3000/api/geocode?address=${encodeURIComponent(address)}`;
+//   console.log(url)
+//   try {
+//     const response = await fetch(url); // Fetching from your own server endpoint
+//     const data = await response.json(); // Parsing the JSON response
+
+//     if (response.ok) {
+//       const location = data.results[0].geometry.location; // Assuming the data format is similar to Google's response
+//       const nearbyLocations = await fetchNearbyLocations(location);
+//       const providerData = await handleNearbyLocationsResponse(nearbyLocations);
+//       updateMap(location); // Passing location to update the map
+//       populateProviderList(providerData); // Using the data to populate UI
+//     } else {
+//       throw new Error(data.error || 'Unknown error'); // Handle errors (e.g., no address found, server errors)
+//     }
+//   } catch (error) {
+//     console.error('Error in geocoding process:', error);
+//     handleError(error); // A function to handle errors globally
+//   }
+// }
 /**
  * Handles the response from a geocoding request.
  *
@@ -334,9 +360,10 @@ function infoWindowContent(provider) {
   return `
     <div>
       <h6>${provider.city}</h6>
+      <p><b>${provider.locAdminStreet1}, ${provider.locAdminCity}, ${provider.locAdminState} ${provider.locAdminZip}</b></p>
       <p>Store number: ${provider.number}</p>
-      <p>Insurance Accepted: ${provider.insuranceAccepted}</p>
-      <p>Address: ${provider.locAdminStreet1}, ${provider.locAdminCity}, ${provider.locAdminState} ${provider.locAdminZip}</p>
+      <p>Insurance Accepted: ${provider.insuranceAccepted ? 'Yes' : 'No'}</p>
     </div>
   `;
 }
+

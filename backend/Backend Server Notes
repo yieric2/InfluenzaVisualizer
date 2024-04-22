@@ -1,0 +1,12 @@
+Pre-requisites:
+Npm init --y
+log your desired port number and api key in a .env file
+
+Dependencies:
+npm i axios
+npm i cors
+npm i express
+
+
+run command:
+node app.js in backend folder
