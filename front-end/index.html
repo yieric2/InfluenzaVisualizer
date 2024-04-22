@@ -113,6 +113,8 @@
                     return response.json();
                 })
                 .then(data => {
+                    originalDatasets = [];
+
                     // Output data to console
                     data.forEach(item => {
 
@@ -157,7 +159,8 @@
 
 
         let chart = null;
-
+        let startWeeks = {}; // Global object to store start weeks for each season
+        let endWeeks = {}; // Global object to store end weeks for each season
         function renderChart(type) { // default behavior on page load
             if (chart) {
                 chart.destroy();
@@ -174,8 +177,6 @@
 
 
             }
-            var startWeeks = {}; // Store start weeks for each season
-            var endWeeks = {}; // Store end weeks for each season
 
             for (let i = 0; i <= 31; i++) {
                 influenza.labels.push(i); // label is populated using for loop
@@ -258,12 +259,12 @@
                                 },
 
                                 label: function (context) {
-                                    var season = context.dataset.season; // Directly accessing the season property
-                                    var startWeek = startWeeks[season][context.dataIndex];
-                                    var endWeek = endWeeks[season][context.dataIndex];
+                                    var season = context.dataset.season;
+                                    var index = context.dataIndex;
+                                    var startWeek = startWeeks[season][index];
+                                    var endWeek = endWeeks[season][index];
                                     var doses = context.parsed.y + ' million cumulative doses';
-
-                                    return ' ' + doses + ' From: ' + startWeek + ' To: ' + endWeek;
+                                    return `${doses} (From: ${startWeek} To: ${endWeek})`;
                                 }
 
 
@@ -372,38 +373,49 @@
 
         function updateGraph(startIndex, endIndex) {
             const ctx = document.getElementById('myChart');
-            const chart = Chart.getChart(ctx);
+            const chart = Chart.getChart(ctx); // Directly get the chart instance
 
-            // Check if original datasets are already stored
-            if (originalDatasets.length === 0) {
-                // Store original datasets if not already stored
-                originalDatasets = JSON.parse(JSON.stringify(chart.data.datasets));
+            if (!originalDatasets.length) {
+                // Store the original datasets in a way that does not affect this array during chart updates
+                originalDatasets = chart.data.datasets.map(dataset => ({
+                    data: dataset.data.slice(), // make a copy of the data
+                    label: dataset.label,
+                    season: dataset.season,
+                    startWeek: startWeeks[dataset.season], // Store start weeks
+                    endWeek: endWeeks[dataset.season] // Store end weeks
+                }));
             }
 
-            // Update chart data with new start and end weeks
-            const labels = [];
+            const labels = Array.from({ length: endIndex - startIndex + 1 }, (_, i) => i + startIndex); // Generate labels from start to end index
             const datasets = [];
+            const newStartWeeks = {};
+            const newEndWeeks = {};
 
-            for (let i = startIndex; i <= endIndex; i++) {
-                labels.push(i); // update x axis label
-            }
+            originalDatasets.forEach(dataset => {
+                // Slice the original data using startIndex and endIndex
+                const slicedData = dataset.data.slice(startIndex - 1, endIndex);
+                const season = dataset.season;
+                datasets.push({
+                    data: slicedData,
+                    label: dataset.label,
+                    season: season
+                });
+                // Also slice the startWeeks and endWeeks data
+                newStartWeeks[season] = dataset.startWeek.slice(startIndex - 1, endIndex);
+                newEndWeeks[season] = dataset.endWeek.slice(startIndex - 1, endIndex);
+            });
 
-            // Iterate through each dataset (seasons) and update its data array
-            for (let datasetIndex = 0; datasetIndex < originalDatasets.length; datasetIndex++) {
-                const originalData = originalDatasets[datasetIndex].data;
-                // console.log(datasetIndex);
-                // console.log(originalData);
-                const updatedData = originalData.slice(startIndex - 1, endIndex); // slice data into only portion we need
-                datasets.push({ label: originalDatasets[datasetIndex].label, data: updatedData }); // push onto new dataset
-            }
+            // Update global startWeeks and endWeeks references with new sliced data
+            startWeeks = newStartWeeks;
+            endWeeks = newEndWeeks;
 
-            // Update the chart's labels and datasets
+            // Update the chart data
             chart.data.labels = labels;
             chart.data.datasets = datasets;
-
-            // Update the chart
             chart.update();
         }
+
+
     </script>
 </body>
 
