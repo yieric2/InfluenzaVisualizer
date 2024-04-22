@@ -181,8 +181,7 @@
                 influenza.labels.push(i); // label is populated using for loop
             }
             for (var season in cumulDoses) {
-
-                var doses = cumulDoses[season].map(obj => obj.doses); // doses are retrieved from the cumulDose array for specific season
+                var doses = cumulDoses[season].map(obj => obj.doses);
                 var startWeek = cumulDoses[season].map(obj => obj.startWeek);
                 var endWeek = cumulDoses[season].map(obj => obj.endWeek);
 
@@ -191,13 +190,10 @@
 
                 var temp = {
                     data: doses,
-                    label: 'Season: ' + season,
-                    // Adding temporary data attribute to store startWeek and endWeek
-
+                    label: 'Data for ' + season, // You might keep some reference in the label if needed
+                    season: season, // Custom property to store the season name
                 };
-                influenza.datasets.push(temp); // for each year season, push its dataset
-
-
+                influenza.datasets.push(temp);
             }
 
             // TODO if possible make hoverable. 
@@ -262,14 +258,14 @@
                                 },
 
                                 label: function (context) {
-                                    var label = context.dataset.label || '';
+                                    var season = context.dataset.season; // Directly accessing the season property
+                                    var startWeek = startWeeks[season][context.dataIndex];
+                                    var endWeek = endWeeks[season][context.dataIndex];
+                                    var doses = context.parsed.y + ' million cumulative doses';
 
-
-                                    var startWeek = startWeeks[season][context.dataIndex]; // Get start week for this season
-                                    var endWeek = endWeeks[season][context.dataIndex]; // Get end week for this season
-                                    var doses = context.parsed.y + ' million cumulative doses'; // Get doses from tooltip
                                     return ' ' + doses + ' From: ' + startWeek + ' To: ' + endWeek;
                                 }
+
 
                             }
                         }
