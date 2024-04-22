@@ -78,7 +78,7 @@ export default class ProviderLocation {
     }
 
     WeekHours_B() {
-        return "Monday: " + this.mondayHours + "<br>" + "Tuesday: " + this.tuesdayHours + "<br>" + "Wednesday: " + this.wednesdayHours + "<br>" + "Thursday: " + this.thursdayHours + "<br>" + "Friday: " + this.fridayHours + "<br>" + "Saturday: " + this.saturdayHours + "<br>" + "Sunday: " + this.sundayHours;
+        return "<br>Monday: " + this.mondayHours + "<br>" + "Tuesday: " + this.tuesdayHours + "<br>" + "Wednesday: " + this.wednesdayHours + "<br>" + "Thursday: " + this.thursdayHours + "<br>" + "Friday: " + this.fridayHours + "<br>" + "Saturday: " + this.saturdayHours + "<br>" + "Sunday: " + this.sundayHours;
     }
 
     getFullAddress() {
@@ -155,7 +155,7 @@ export default class ProviderLocation {
         </div>
         <p class="mb-1">Phone: ${this.getPhoneNumber()}</p>
         <p class="mb-1">Web: <a href="${this.getWebsite()}/">${this.getWebsite()}</a></p>
-        <p class="mb-1">Hours: ${this.WeekHours_A()}</p>
+        <p class="mb-1">Hours: ${this.WeekHours_B()}</p>
         <small>Walk-ins: ${this.acceptsWalkIns() ? 'Yes' : 'No'} Insurance: ${this.acceptsInsurance() ? 'Yes' : 'No'}</small>
     `;
     }
