@@ -191,7 +191,7 @@
 
                 var temp = {
                     data: doses,
-                    label: season,
+                    label: 'Season: ' + season,
                     // Adding temporary data attribute to store startWeek and endWeek
 
                 };
@@ -264,12 +264,15 @@
                                 label: function (context) {
                                     var label = context.dataset.label || '';
 
-                                    var season = label.split(': ')[1]; // Extract season from label
+                                    // Check if the label format includes "Season: ", if not use label directly
+                                    var season = label.includes(': ') ? label.split(': ')[1] : label;
+
                                     var startWeek = startWeeks[season][context.dataIndex]; // Get start week for this season
                                     var endWeek = endWeeks[season][context.dataIndex]; // Get end week for this season
                                     var doses = context.parsed.y + ' million cumulative doses'; // Get doses from tooltip
                                     return ' ' + doses + ' From: ' + startWeek + ' To: ' + endWeek;
                                 }
+
                             }
                         }
                     }
